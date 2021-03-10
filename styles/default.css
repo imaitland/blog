@@ -1,0 +1,17 @@
+html.jsEnabled #NoJS {display: none;}
+
+body {
+    background: #333131;
+}
+
+.posts-index {
+    color: white;
+    margin-top: 12rem;
+}
+.posts-index a {
+    font-family: Helvetica, sans-serif;
+    color: white;
+    text-decoration: none; /* no underline */
+}
+.logo-blog_page {
+}
