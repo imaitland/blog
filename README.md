@@ -9,14 +9,21 @@ Welcome to my blog, it's a pretty simple webserver, running the following stack:
 - **Animations**: [animejs](https://github.com/juliangarnier/anime/)
 - **Syntax Highlighting**: [highlight.js](https://github.com/highlightjs/highlight.js)
 
+## Install and run locally
+
+To get the blog running locally you can run the following commands.
+
+```
+yarn build
+cargo run
+```
+
+With the site running locally, defaults to `port 8080` you can add markdown files to the 'md' directory, make sure their frontmatter conforms to the struct defined in `rend
+
+
 ## Next steps.
 - [ ] Enable drafts.
 - [ ] Create a static site build command, and host on s3 / netlify / github pages or similar.
 - [ ] Create an admin mode, to create posts and deploy a static build of the site from the browser.
 - [ ] Write an image hoster service to make it easy to embed responsive images.
 
-## Install and run locally
-```
-yarn build
-cargo run
-``

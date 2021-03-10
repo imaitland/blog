@@ -1,6 +1,6 @@
 use maud::{html};
 use rouille::{router, Response};
-mod renderers;
+mod render;
 use std::fs;
 
 fn main(){
@@ -19,29 +19,29 @@ fn main(){
                 rouille::match_assets(&request, ".")
             },
             (GET) ["/graph"] => {
-                let graph_data: renderers::Graph = renderers::helpers::generate_graph("md");
+                let graph_data: render::Graph = render::helpers::generate_graph("md");
                 Response::json(&graph_data)
             },
             (GET) ["/"] => {
 
-                let icons = renderers::Icons();
-                let force_graph_script = renderers::Script("node_modules/force-graph/dist/force-graph.min.js");
-                let graph_script = renderers::Script("js/graph.js");
-                let logo = renderers::Logo();
-                let default_css = renderers::Css("styles/default.css");
+                let icons = render::Icons();
+                let force_graph_script = render::Script("node_modules/force-graph/dist/force-graph.min.js");
+                let graph_script = render::Script("js/graph.js");
+                let logo = render::Logo();
+                let default_css = render::Css("styles/default.css");
 
                 // animejs
-                let anime_js_script = renderers::Script("node_modules/animejs/lib/anime.min.js");
-                let anime_script = renderers::Script("js/anime.js");
-                let anime_css = renderers::Css("styles/anime.css");
+                let anime_js_script = render::Script("node_modules/animejs/lib/anime.min.js");
+                let anime_script = render::Script("js/anime.js");
+                let anime_css = render::Css("styles/anime.css");
 
                 // Index page for visitors who have JS disabled.
-                let ix = renderers::helpers::generate_index("md");
+                let ix = render::helpers::generate_index("md");
                 let stripped = ix.iter().map(|pa|{
                     let result = pa.strip_prefix("md/").unwrap().strip_suffix(".md").unwrap();
                     String::from(result)
                 }).collect();
-                let posts_list = renderers::Index(&stripped);
+                let posts_list = render::Index(&stripped);
 
                 Response::html(html! {
                     head {
@@ -69,22 +69,22 @@ fn main(){
                 match fs::read_to_string(file_path) {
                     Ok(contents) => {
 
-                        let logo = renderers::Logo();
-                        let anime_script = renderers::Script("js/anime.js");
-                        let anime_css = renderers::Css("styles/anime.css");
-                        let anime_js_script = renderers::Script("node_modules/animejs/lib/anime.min.js");
+                        let logo = render::Logo();
+                        let anime_script = render::Script("js/anime.js");
+                        let anime_css = render::Css("styles/anime.css");
+                        let anime_js_script = render::Script("node_modules/animejs/lib/anime.min.js");
 
-                        let (frontmatter, md_contents) = renderers::helpers::split_contents(&contents);
+                        let (frontmatter, md_contents) = render::helpers::split_contents(&contents);
 
-                        let meta = renderers::Meta(&frontmatter);
-                        let icons = renderers::Icons();
-                        let md_css = renderers::Css("styles/md.css");
-                        let md = renderers::Markdown(&md_contents);
+                        let meta = render::Meta(&frontmatter);
+                        let icons = render::Icons();
+                        let md_css = render::Css("styles/md.css");
+                        let md = render::Markdown(&md_contents);
 
-                        /// Syntax highlighting
-                        let syntax_css = renderers::Css("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css");
-                        let syntax_script = renderers::Script("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js");
-                        let syntax_init = renderers::Script("js/syntax.js");
+                        // Syntax highlighting
+                        let syntax_css = render::Css("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css");
+                        let syntax_script = render::Script("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js");
+                        let syntax_init = render::Script("js/syntax.js");
 
                         Response::html(html!{
                             head {
