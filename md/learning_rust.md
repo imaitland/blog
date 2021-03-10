@@ -11,14 +11,20 @@ icon = "🦀"
 
 # Rust
 
-My new year's resolution for 2021 has been to learn rust. I've been collecting learning exercises, my thoughts and notes on them here.
+As I learn Rust I've been collecting exercises, my thoughts and notes on them here.
 
 ## Projects
 - A static site generator (i.e this blog!)
+- ImageHoster.
+
+## Notes
+- [Ownership in Rust](/ownership_in_rust)
+- [Converting numbers](/converting_numbers)
 
 ## Learning Exercises
 - Multi-threaded server implementation
 - Parser Combinator
 - KV store implementation
-- Build your own Lisp (in Rust)
 - Rust Linked Lists
+- Build your own Lisp (in Rust)
+- [Data Structures](/data_structures)
