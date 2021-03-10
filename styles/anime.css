@@ -1,0 +1,42 @@
+.logo-front_page{
+    position: absolute;
+    top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.logo-blog_page {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.8rem;
+    padding-bottom: .5rem;
+}
+
+.logo-blog_page a {
+    color: black;
+}
+
+.logo-container {
+    white-space: pre;
+    z-index: 999;
+}
+
+.logo {
+    text-decoration: none;
+    text-align: center;
+    font-size: xx-large;
+    color: white;
+}
+
+.reveal {
+    display: inline-block;
+    opacity: 1;
+}
+.revealspring {
+    display: inline-block;
+    opacity: 1;
+}
