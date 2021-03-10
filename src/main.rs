@@ -16,7 +16,16 @@ fn main(){
             (GET) ["/node_modules/force-graph/dist/force-graph.min.js"] => {
                 rouille::match_assets(&request, ".")
             },
+            (GET) ["/node_modules/animejs/lib/anime.min.js"] => {
+                rouille::match_assets(&request, ".")
+            },
             (GET) ["/js/graph.js"] => {
+                rouille::match_assets(&request, ".")
+            },
+            (GET) ["/js/anime.js"] => {
+                rouille::match_assets(&request, ".")
+            },
+            (GET) ["/js/syntax.js"] => {
                 rouille::match_assets(&request, ".")
             },
             (GET) ["/graph"] => {
@@ -24,17 +33,42 @@ fn main(){
                 Response::json(&graph_data)
             },
             (GET) ["/"] => {
+
                 let icons = renderers::Icons();
-                let force_graph_script = renderers::Script("/node_modules/force-graph/dist/force-graph.min.js");
-                let graph_script = renderers::Script("/js/graph.js");
+                let force_graph_script = renderers::Script("node_modules/force-graph/dist/force-graph.min.js");
+                let graph_script = renderers::Script("js/graph.js");
+                let logo = renderers::Logo();
+                let default_css = renderers::Css("styles/default.css");
+                // animejs
+                let anime_js_script = renderers::Script("node_modules/animejs/lib/anime.min.js");
+                let anime_script = renderers::Script("js/anime.js");
+                let anime_css = renderers::Css("styles/anime.css");
+
+                // Index page for visitors who have JS disabled.
+                let ix = renderers::generate_index("md");
+                let stripped = ix.iter().map(|pa|{
+                    let result = pa.strip_prefix("md/").unwrap().strip_suffix(".md").unwrap();
+                    String::from(result)
+                }).collect();
+                let posts_list = renderers::Index(&stripped);
 
                 Response::html(html! {
                     head {
                         (icons)
                         (force_graph_script)
+                        (default_css)
+                        (anime_js_script)
+                        (anime_css)
                     }
-                    div id="graph" {} 
+                    div class="logo-front_page"{
+                        (logo)
+                    }
+                    div id="graph" {} // div with this id is targeted by graph js...
+                    div id="NoJS" class="posts-index" {
+                        (posts_list)
+                    }
                     (graph_script)
+                    (anime_script)
                 })
 
             },
@@ -44,24 +78,41 @@ fn main(){
                 match fs::read_to_string(file_path) {
                     Ok(contents) => {
 
+                        let logo = renderers::Logo();
+                        let anime_script = renderers::Script("js/anime.js");
+                        let anime_css = renderers::Css("styles/anime.css");
+                        let anime_js_script = renderers::Script("node_modules/animejs/lib/anime.min.js");
+
                         let (frontmatter, md_contents) = renderers::split_contents(&contents);
 
                         let meta = renderers::Meta(&frontmatter);
                         let icons = renderers::Icons();
                         let md_css = renderers::Css("styles/md.css");
-                        let logo = renderers::Logo();
                         let md = renderers::Markdown(&md_contents);
+
+                        // Syntax highlighting
+                        let syntax_css = renderers::Css("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css");
+                        let syntax_script = renderers::Script("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js");
+                        let syntax_init = renderers::Script("js/syntax.js");
 
                         Response::html(html!{
                             head {
                                 (icons)
                                 (meta)
                                 (md_css)
+                                (anime_js_script)
+                                (anime_css)
+                                (syntax_css)
+                                (syntax_script)
                             }
-                            (logo)
+                            div class="logo-blog_page"{
+                                (logo)
+                            }
                             div class="markdown-body" {
                                 (md)
                             }
+                            (anime_script)
+                                (syntax_init)
                         })
                     }
                     Err(_why) => {
