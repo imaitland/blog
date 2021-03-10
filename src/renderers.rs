@@ -33,24 +33,24 @@ pub fn get_edges(contents: &String, fm: &Frontmatter) -> Vec<Edge> {
                 Tag::Link(link_type, url, _title) => {
                     match link_type {
                         LinkType::Inline => {
-
-                            let edge = Edge {
-                                source: Node {
-                                    id: fm.id.to_owned(),
-                                    title: None,
-                                    tag: None,
-                                    icon: None
-                                },
-                                target: Node {
-                                    id: url.as_ref().strip_prefix("/").unwrap().to_string(),
-                                    title: None,
-                                    tag: None,
-                                    icon: None
-                                }
-                            };
-
-                            edges.push(edge);
-                            
+                            // Relative links only. 
+                            if url.as_ref().starts_with("/") {
+                                let edge = Edge {
+                                    source: Node {
+                                        id: fm.id.to_owned(),
+                                        title: None,
+                                        tag: None,
+                                        icon: None
+                                    },
+                                    target: Node {
+                                        id: url.as_ref().strip_prefix("/").unwrap().to_string(),
+                                        title: None,
+                                        tag: None,
+                                        icon: None
+                                    }
+                                };
+                                edges.push(edge);
+                            }
                             event.to_owned()
                         },
                         _ => event.to_owned()
@@ -132,12 +132,7 @@ impl Render for Css {
     }
 }
 
-pub fn generate_graph(dir: &str) -> Graph {
-
-    let mut graph = Graph {
-        nodes: vec![],
-        links: vec![]
-    };
+pub fn generate_index(dir: &str) -> Vec<String> {
 
     let paths: Vec<String> = WalkDir::new(dir)
         .into_iter()
@@ -153,6 +148,18 @@ pub fn generate_graph(dir: &str) -> Graph {
 
         })
         .collect();
+
+    paths
+}
+
+pub fn generate_graph(dir: &str) -> Graph {
+
+    let mut graph = Graph {
+        nodes: vec![],
+        links: vec![]
+    };
+
+    let paths = generate_index(dir);
 
     for i in 0..paths.len() {
         let p = &paths[i];
@@ -216,7 +223,7 @@ impl Render for Index<'_> {
             ul {
                 @for md in self.0.iter() {
                     li {
-                        a href=(md) {(md)}
+                        a href=(md) {(md.split("_").collect::<Vec<&str>>().join(" "))}
                     }
                 }
             }
@@ -272,8 +279,16 @@ pub struct Logo();
 impl Render for Logo {
     fn render(&self) -> Markup {
         html! {
-            a href="/" {
-                p {"/ /\\ / /\\/"}
+            div class="logo-container" {
+                a class="logo" href="/" {
+                    span class="revealspring" data-x="30" data-y="-78" {"/ "}
+                    span class="reveal" data-x="-40" data-y="104" {"/"}
+                    span class="reveal" data-x="-60" data-y="-156" {"\\ "}
+                    span class="reveal" data-x="34" data-y="-88" {"/ "}
+                    span class="reveal" data-x="-16" data-y="42" {"/"}
+                    span class="revealspring" data-x="104" data-y="272" {"\\"}
+                    span class="reveal" data-x="75" data-y="-195" {"/ "}
+                }
             }
         }
     }
