@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "animejs": "^3.2.1",
     "force-graph": "^1.36.2"
   }
 }
