@@ -7,6 +7,7 @@ date = 2021-02-27
 tag = "rust"
 image = "/assets/og-image-512x512.png"
 icon = "🚕"
+draft = false
 +++
 
 # Ownership in Rust.

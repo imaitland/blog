@@ -7,6 +7,7 @@ date = 2021-02-24
 tag = "painting"
 image = "/assets/og-image-512x512.png"
 icon = "🐚"
+draft = true
 +++
 
 # Paintings

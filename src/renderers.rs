@@ -7,71 +7,7 @@ use serde::{Deserialize, Serialize};
 use toml;
 use walkdir::WalkDir;
 
-pub fn split_contents(contents: &String) -> (Frontmatter, String) {
-    // Spit frontmatter and contents, create a frontmatter renderer.
-    let split_contents: Vec<&str> = contents.split("+++").collect();
-
-    let mut frontmatter = "";
-    let mut md_contents = contents.as_str();
-
-    if split_contents.len() > 1 {
-        frontmatter = split_contents[1];
-        md_contents = split_contents[2];
-    }
-    let fm: Frontmatter = toml::from_str(frontmatter).unwrap();
-    (fm, md_contents.to_string())
-}
-
-pub fn get_edges(contents: &String, fm: &Frontmatter) -> Vec<Edge> {
-
-    let mut edges: Vec<Edge> = vec![];
-
-    let mut parser = Parser::new(contents).map(|event| match event {
-        Event::Start(ref tag) => {
-
-            match tag {
-                Tag::Link(link_type, url, _title) => {
-                    match link_type {
-                        LinkType::Inline => {
-                            // Relative links only. 
-                            if url.as_ref().starts_with("/") {
-                                let edge = Edge {
-                                    source: Node {
-                                        id: fm.id.to_owned(),
-                                        title: None,
-                                        tag: None,
-                                        icon: None
-                                    },
-                                    target: Node {
-                                        id: url.as_ref().strip_prefix("/").unwrap().to_string(),
-                                        title: None,
-                                        tag: None,
-                                        icon: None
-                                    }
-                                };
-                                edges.push(edge);
-                            }
-                            event.to_owned()
-                        },
-                        _ => event.to_owned()
-                    };
-                },
-                _ => ()
-            }
-            event
-        }
-        _ => event
-    });
-        
-    loop {
-        parser.next();
-        if parser.next() == None {
-            break;
-        }
-    };
-    edges
-}
-
+/// Structs
 #[derive(Deserialize, PartialEq, Debug)]
 pub struct Frontmatter {
     title: String,
@@ -81,7 +17,8 @@ pub struct Frontmatter {
     date: Datetime, // "2015-09-05"
     tag: String,
     image: String,
-    icon: String
+    icon: String,
+    draft: bool
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -130,73 +67,6 @@ impl Render for Css {
             link rel="stylesheet" type="text/css" href=(self.0);
         }
     }
-}
-
-pub fn generate_index(dir: &str) -> Vec<String> {
-
-    let paths: Vec<String> = WalkDir::new(dir)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file())
-        .map(|e| {
-
-            let path = e
-                .path()
-                .to_str()
-                .unwrap();
-                String::from(path)
-
-        })
-        .collect();
-
-    paths
-}
-
-pub fn generate_graph(dir: &str) -> Graph {
-
-    let mut graph = Graph {
-        nodes: vec![],
-        links: vec![]
-    };
-
-    let paths = generate_index(dir);
-
-    for i in 0..paths.len() {
-        let p = &paths[i];
-
-        match fs::read_to_string(p) {
-            Ok(file_contents) => {
-                // Split frontmatter here...
-                let (fm, md) = split_contents(&file_contents);
-
-                graph.nodes.push(
-                    Node{
-                        id: fm.id.to_owned(),
-                        title: Some(fm.title.to_owned()),
-                        icon: Some(fm.icon.to_owned()),
-                        tag: Some(fm.tag.to_owned())
-                    }
-                );
-
-                let e = get_edges(&md, &fm);
-
-                let mut links = e.iter().map(|edge| {
-                    Link {
-                        source: edge.source.id.to_owned(),
-                        target: edge.target.id.to_owned()
-                    }
-                }).collect();
-                graph.links.append(&mut links);
-            }
-            Err(_why) => {
-
-            }
-        }
-
-    }
-    // Parse to json.
-    //serde_json::to_string(&graph).unwrap();
-    graph
 }
 
 /// Renders a block of Markdown using `pulldown-cmark`.
@@ -291,5 +161,137 @@ impl Render for Logo {
                 }
             }
         }
+    }
+}
+
+pub mod helpers {
+    use super::*;
+
+    pub fn split_contents(contents: &String) -> (Frontmatter, String) {
+        // Spit frontmatter and contents, create a frontmatter renderer.
+        let split_contents: Vec<&str> = contents.split("+++").collect();
+
+        let mut frontmatter = "";
+        let mut md_contents = contents.as_str();
+
+        if split_contents.len() > 1 {
+            frontmatter = split_contents[1];
+            md_contents = split_contents[2];
+        }
+        let fm: Frontmatter = toml::from_str(frontmatter).unwrap();
+        (fm, md_contents.to_string())
+    }
+
+    pub fn generate_graph(dir: &str) -> Graph {
+
+        let mut graph = Graph {
+            nodes: vec![],
+            links: vec![]
+        };
+
+        let paths = helpers::generate_index(dir);
+
+        for i in 0..paths.len() {
+            let p = &paths[i];
+
+            match fs::read_to_string(p) {
+                Ok(file_contents) => {
+                    // Split frontmatter here...
+                    let (fm, md) = helpers::split_contents(&file_contents);
+
+                    graph.nodes.push(
+                        Node{
+                            id: fm.id.to_owned(),
+                            title: Some(fm.title.to_owned()),
+                            icon: Some(fm.icon.to_owned()),
+                            tag: Some(fm.tag.to_owned())
+                        }
+                    );
+
+                    let e = helpers::get_edges(&md, &fm);
+
+                    let mut links = e.iter().map(|edge| {
+                        Link {
+                            source: edge.source.id.to_owned(),
+                            target: edge.target.id.to_owned()
+                        }
+                    }).collect();
+                    graph.links.append(&mut links);
+                }
+                Err(_why) => {
+
+                }
+            }
+
+        }
+        // Parse to json.
+        //serde_json::to_string(&graph).unwrap();
+        graph
+    }
+
+    pub fn generate_index(dir: &str) -> Vec<String> {
+        let paths: Vec<String> = WalkDir::new(dir)
+            .into_iter()
+            .filter_map(|e| e.ok())
+            .filter(|e| e.file_type().is_file())
+            .map(|e| {
+                let path = e
+                    .path()
+                    .to_str()
+                    .unwrap();
+                    String::from(path)
+            })
+            .collect();
+        paths
+    }
+
+    pub fn get_edges(contents: &String, fm: &Frontmatter) -> Vec<Edge> {
+
+        let mut edges: Vec<Edge> = vec![];
+
+        let mut parser = Parser::new(contents).map(|event| match event {
+            Event::Start(ref tag) => {
+
+                match tag {
+                    Tag::Link(link_type, url, _title) => {
+                        match link_type {
+                            LinkType::Inline => {
+                                // Relative links only. 
+                                if url.as_ref().starts_with("/") {
+                                    let edge = Edge {
+                                        source: Node {
+                                            id: fm.id.to_owned(),
+                                            title: None,
+                                            tag: None,
+                                            icon: None
+                                        },
+                                        target: Node {
+                                            id: url.as_ref().strip_prefix("/").unwrap().to_string(),
+                                            title: None,
+                                            tag: None,
+                                            icon: None
+                                        }
+                                    };
+                                    edges.push(edge);
+                                }
+                                event.to_owned()
+                            },
+                            _ => event.to_owned()
+                        };
+                    },
+                    _ => ()
+                }
+                event
+            }
+            _ => event
+        });
+            
+        loop {
+            parser.next();
+            if parser.next() == None {
+                break;
+            }
+        };
+        edges
     }
 }

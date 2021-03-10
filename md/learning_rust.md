@@ -7,6 +7,7 @@ date = 2021-02-24
 tag = "rust"
 image = "/assets/og-image-512x512.png"
 icon = "🦀"
+draft = false
 +++
 
 # Rust
@@ -15,7 +16,6 @@ As I learn Rust I've been collecting exercises, my thoughts and notes on them he
 
 ## Projects
 - A static site generator (i.e this blog!)
-- ImageHoster.
 
 ## Notes
 - [Ownership in Rust](/ownership_in_rust)

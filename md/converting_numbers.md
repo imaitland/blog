@@ -7,6 +7,7 @@ date = 2021-03-11
 tag = "rust"
 image = "/assets/og-image-512x512.png"
 icon = "🧮"
+draft = true
 +++
 
 # Converting numbers
