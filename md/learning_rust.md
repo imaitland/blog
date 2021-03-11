@@ -19,7 +19,6 @@ As I learn Rust I've been collecting exercises, my thoughts and notes on them he
 
 ## Notes
 - [Ownership in Rust](/ownership_in_rust)
-- [Converting numbers](/converting_numbers)
 
 ## Learning Exercises
 - Multi-threaded server implementation

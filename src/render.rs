@@ -1,11 +1,17 @@
 use toml::value::Datetime;
 use std::fs;
+use std::io::{BufReader, BufRead, Error};
 use maud::{Render, html, PreEscaped, Markup};
 use pulldown_cmark::{Parser, LinkType, Tag, Event};
 use ammonia;
 use serde::{Deserialize, Serialize};
 use toml;
 use walkdir::WalkDir;
+
+pub enum Asset {
+    CSS,
+    JS
+}
 
 /// Structs
 #[derive(Deserialize, PartialEq, Debug)]
@@ -47,13 +53,42 @@ pub struct Graph {
     links: Vec<Link>
 }
 
+pub struct JsObject(pub String, pub &'static str);
+impl Render for JsObject{
+    fn render(&self) -> Markup {
+        //println!("args: {} {}", self.0, self.1);
+        let mut js_object = &self.0;
+        let mut js_object_name = &self.1;
+        let mut js = format!("var {} = {}", js_object_name, js_object);
+        html! {
+            script {
+               (PreEscaped(js)) 
+            }
+        }
+    }
+}
+
+
 /// Links to a JS script at the given path.
 pub struct Script(pub &'static str);
 
 impl Render for Script{
     fn render(&self) -> Markup {
-        html! {
-            script src=(self.0) {};
+        match fs::read_to_string(self.0) {
+            Ok(file_contents) => {
+                html! {
+                    script {
+                        (PreEscaped(file_contents))
+                    }
+                }
+            },
+            Err(_err) => {
+                html! {
+                    div {
+                        "Could not find that file:" (self.0)
+                    }
+                }
+            }
         }
     }
 }
@@ -63,10 +98,42 @@ pub struct Css(pub &'static str);
 
 impl Render for Css {
     fn render(&self) -> Markup {
-        // Read to string and embedd it...
-        
-        html! {
-            link rel="stylesheet" type="text/css" href=(self.0);
+        // Read to string and embedd it instead of the reference.
+        match fs::read_to_string(self.0) {
+            Ok(file_contents) => {
+                html! {
+                    style media="all" {
+                        (file_contents)
+                    }
+                }
+            },
+            Err(_err) => {
+                html! {
+                    div {
+                        "Could not find that file:" (self.0)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Renders a block of Markdown using `pulldown-cmark`.
+pub struct ExternalAsset<'a>(pub &'a str, pub Asset);
+
+impl Render for ExternalAsset <'_> {
+    fn render(&self) -> Markup {
+        match self.1 {
+            Asset::CSS => {
+                html! {
+                    link rel="stylesheet" type="text/css" href=(self.0);
+                }
+            },
+            Asset::JS => {
+                html! {
+                    script src=(self.0) {};
+                }
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 use std::fs;
-use std::io::{Write, BufReader, BufRead, Error};
+use std::io::{Write};
 use std::env;
 use maud::{html};
 use rouille::{router, Response};
@@ -24,15 +24,14 @@ fn main(){
 
     let address = format!("0.0.0.0:{}", port);
     if build == true {
+        // 
+        // let index_page = indexfuncuton...
 
     }
 
     rouille::start_server(address, move |request| {
         router!(request,
             (GET) ["/assets/{asset}", asset: String] => {
-                rouille::match_assets(&request, ".")
-            },
-            (GET) ["/styles/{style}", style: String] => {
                 rouille::match_assets(&request, ".")
             },
             (GET) ["/js/{script}", script: String] => {
@@ -47,14 +46,20 @@ fn main(){
                 let path = "graph_data.json";
                 let mut output = fs::File::create(path).unwrap();
 
-                // Parse to json.
+                // Parse to json and save to file.
                 let graph_json = serde_json::to_string(&graph_data).unwrap();
                 write!(output, "{}", graph_json).unwrap();
+
                 Response::json(&graph_data)
             },
             (GET) ["/"] => {
-
                 let icons = render::Icons();
+
+                // Graph data
+                let graph_data: render::Graph = render::helpers::generate_graph("md");
+                let graph_json = serde_json::to_string(&graph_data).unwrap();
+                let graph = render::JsObject(graph_json, "graph_data");
+
                 let force_graph_script = render::Script("node_modules/force-graph/dist/force-graph.min.js");
                 let graph_script = render::Script("js/graph.js");
                 let logo = render::Logo();
@@ -72,6 +77,7 @@ fn main(){
                     String::from(result)
                 }).collect();
                 let posts_list = render::Index(&stripped);
+
                 let index_html = html! {
                     head {
                         (icons)
@@ -79,6 +85,7 @@ fn main(){
                         (default_css)
                         (anime_js_script)
                         (anime_css)
+                        (graph)
                     }
                     div class="logo-front_page"{
                         (logo)
@@ -111,8 +118,8 @@ fn main(){
                         let md = render::Markdown(&md_contents);
 
                         // Syntax highlighting
-                        let syntax_css = render::Css("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css");
-                        let syntax_script = render::Script("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js");
+                        let syntax_css = render::ExternalAsset("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css", render::Asset::CSS);
+                        let syntax_script = render::ExternalAsset("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js", render::Asset::JS);
                         let syntax_init = render::Script("js/syntax.js");
 
                         let post_html = html!{
