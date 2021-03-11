@@ -2,7 +2,9 @@
 
 Welcome to my lil static site generator. It's used to create my [blog](https://iainmaitland.com).
 
-Locally it's a simple webserver, running the following stack:
+> :dromedary_camel: I made this static site generator to get a better grip on using Rust for web development, and for fun. As such it's fairly specific to my tastes and use case.
+
+Locally it's a simple webserver, with the following dependencies:
 
 - **Server**: [rouille](https://github.com/tomaka/rouille)
 - **Markdown Parsing**: [pulldown-cmark](https://github.com/raphlinus/pulldown-cmark)
@@ -11,9 +13,7 @@ Locally it's a simple webserver, running the following stack:
 - **Animations**: [animejs](https://github.com/juliangarnier/anime/)
 - **Syntax Highlighting**: [highlight.js](https://github.com/highlightjs/highlight.js)
 
-
-> :information_desk_person: It also features the ability to generate a static version of the site, for cheap and easy hosting on your provider of choice. `cargo run --ssg`, static files appear in the `dist` directory.
-
+> :information_desk_person: It also features the ability to generate a static version of the site, for cheap and easy hosting on your provider of choice. `cargo run --ssg`, static files appear in the `dist` directory with `index.html` being the entry point.
 
 ## Install and run locally
 
@@ -39,6 +39,4 @@ The files in the newly created `dist` directory represent your site.
 - [ ] Write an image hoster service to make it easy to embed responsive images.
 
 ## Some Context
-> :dromedary_camel: I made this static site generator to get a better grip on using Rust for web development, and for fun. As such it's fairly specific to my tastes and use case.
-
-> :crocodile: I think that to a casual observer it provides a useful reference for parsing markdown, generating html templates and a simple webserver. I certainly found it ergonomic and fun to build this in Rust.
+> :crocodile: I think that to a casual observer this codebase provides a useful reference for parsing markdown, generating html templates and a simple webserver all within Rust. 
