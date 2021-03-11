@@ -1,6 +1,5 @@
 use toml::value::Datetime;
 use std::fs;
-use std::io::{BufReader, BufRead, Error};
 use maud::{Render, html, PreEscaped, Markup};
 use pulldown_cmark::{Parser, LinkType, Tag, Event};
 use ammonia;
@@ -56,10 +55,7 @@ pub struct Graph {
 pub struct JsObject(pub String, pub &'static str);
 impl Render for JsObject{
     fn render(&self) -> Markup {
-        //println!("args: {} {}", self.0, self.1);
-        let mut js_object = &self.0;
-        let mut js_object_name = &self.1;
-        let mut js = format!("var {} = {}", js_object_name, js_object);
+        let js = format!("var {} = {}", &self.1, &self.0);
         html! {
             script {
                (PreEscaped(js)) 
