@@ -13,19 +13,21 @@ Locally it's a simple webserver, with the following dependencies:
 - **Animations**: [animejs](https://github.com/juliangarnier/anime/)
 - **Syntax Highlighting**: [highlight.js](https://github.com/highlightjs/highlight.js)
 
-> :information_desk_person: It also features the ability to generate a static version of the site, for cheap and easy hosting on your provider of choice. `cargo run --ssg`, static files appear in the `dist` directory with `index.html` being the entry point.
+> :information_desk_person: It also features the ability to generate a static version of the site, for cheap and easy hosting on your provider of choice. `cargo run -- --build`, static files appear in the `dist` directory with `index.html` being the entry point.
 
 ## Install and run locally
 
 To get the blog running locally you can run the following commands.
 
+### Install and Run
 ```
 yarn build
-cargo run --port 8000
+cargo run -- --port 8000
 ```
 
 With the site running locally, (defaults to `port 8080`) you can add markdown files to the `/md` directory, make sure their frontmatter conforms to the `Frontmatter` struct defined in `render.rs`.
 
+### Generate Static Site
 To generate a static build run:
 ```
 cargo run --ssg
@@ -33,9 +35,9 @@ cargo run --ssg
 The files in the newly created `dist` directory represent your site.
 
 ## Next steps.
+- [ ] Tests!
 - [ ] Enable drafts.
 - [x] Create a static site build command, and host on s3 / netlify / github pages or similar.
-- [ ] Create an admin mode, to create posts and deploy a static build of the site from the browser.
 - [ ] Write an image hoster service to make it easy to embed responsive images.
 
 ## Some Context
