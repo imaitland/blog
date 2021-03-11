@@ -1,6 +1,5 @@
 use std::fs;
 use std::env;
-use maud::{html};
 use rouille::{router, Response};
 
 mod render;
@@ -22,8 +21,15 @@ fn main(){
 
     let address = format!("0.0.0.0:{}", port);
     if build == true {
-        // 
-        // let index_page = indexfuncuton...
+        match build::page_builder::build() {
+            Ok(_r) => {
+                println!("Build complete");
+            },
+            Err(_why) => {
+                println!("Build Failed!")
+                
+            }
+        }
     }
 
     rouille::start_server(address, move |request| {

@@ -2,10 +2,9 @@
 // save index.html
 // save html for each md post.
 
-use std::fs::{File};
 use std::fs;
 use serde_json;
-use maud::{Render, html, PreEscaped, Markup};
+use maud::{ html, Markup};
 
 use crate::render;
 
@@ -95,16 +94,29 @@ pub fn md_page (contents: String) -> Markup {
         (syntax_init)
     }
 }
-/*
 
-pub fn build() -> Result<(),()>  {
-    // Create dist director...
-    fs::create_dir("/dist")?;
-    let index_html = index_page();
-    // write file...
-    let mut output = File::create("/dist/index.html")?;
-    write!(output,"{}", index_html.to_string())?;
+pub fn build() -> Result<(),std::io::Error>  {
+    match fs::create_dir("dist") {
+        Ok(_) => {},
+        Err(_) => {}
+    };
+    let index_html = index_page().into_string();
+    fs::write("dist/index.html", index_html).expect("Unable to write file");
+    let file_index = render::render_html::helpers::generate_index("md");
 
+    for file_path in file_index {
+        match fs::read_to_string(&file_path) {
+            Ok(contents) => {
+                let md_html = md_page(contents).into_string();
+                let old_file_name = file_path.strip_prefix("md/").unwrap().strip_suffix(".md").unwrap();
+                let new_file_name = format!("dist/{}", String::from(old_file_name)); 
+
+                fs::write(new_file_name, md_html).expect("Unable to write file");
+            },
+            Err(_why) => {
+                ()
+            }
+        }
+    }
     Ok(())
 }
-*/
