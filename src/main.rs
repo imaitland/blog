@@ -1,10 +1,33 @@
+use std::fs;
+use std::io::{Write, BufReader, BufRead, Error};
+use std::env;
 use maud::{html};
 use rouille::{router, Response};
+use serde_json;
+
 mod render;
-use std::fs;
+mod build;
 
 fn main(){
-    rouille::start_server("0.0.0.0:8080", move |request| {
+
+    let args: Vec<String> = env::args().collect();
+    let mut port = String::from("8080");
+    let mut build = false;
+    for i in 0..args.len() {
+        if args[i] == "--port" {
+            port = args[i+1].to_owned();
+        }
+        if args[i] == "--build" {
+            build = true
+        }
+    }
+
+    let address = format!("0.0.0.0:{}", port);
+    if build == true {
+
+    }
+
+    rouille::start_server(address, move |request| {
         router!(request,
             (GET) ["/assets/{asset}", asset: String] => {
                 rouille::match_assets(&request, ".")
@@ -20,6 +43,13 @@ fn main(){
             },
             (GET) ["/graph"] => {
                 let graph_data: render::Graph = render::helpers::generate_graph("md");
+                // Save this a .json file
+                let path = "graph_data.json";
+                let mut output = fs::File::create(path).unwrap();
+
+                // Parse to json.
+                let graph_json = serde_json::to_string(&graph_data).unwrap();
+                write!(output, "{}", graph_json).unwrap();
                 Response::json(&graph_data)
             },
             (GET) ["/"] => {
@@ -42,8 +72,7 @@ fn main(){
                     String::from(result)
                 }).collect();
                 let posts_list = render::Index(&stripped);
-
-                Response::html(html! {
+                let index_html = html! {
                     head {
                         (icons)
                         (force_graph_script)
@@ -60,8 +89,8 @@ fn main(){
                     }
                     (graph_script)
                     (anime_script)
-                })
-
+                };
+                Response::html(index_html)
             },
             (GET) ["/{id}", id: String] => {
                 let file_path = ["md/", &id, ".md"].join("");
@@ -86,7 +115,7 @@ fn main(){
                         let syntax_script = render::Script("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js");
                         let syntax_init = render::Script("js/syntax.js");
 
-                        Response::html(html!{
+                        let post_html = html!{
                             head {
                                 (icons)
                                 (meta)
@@ -104,7 +133,9 @@ fn main(){
                             }
                             (anime_script)
                             (syntax_init)
-                        })
+                        };
+
+                        Response::html(post_html)
                     }
                     Err(_why) => {
                         Response::text("Couldn't find that file!")

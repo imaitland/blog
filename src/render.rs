@@ -63,6 +63,8 @@ pub struct Css(pub &'static str);
 
 impl Render for Css {
     fn render(&self) -> Markup {
+        // Read to string and embedd it...
+        
         html! {
             link rel="stylesheet" type="text/css" href=(self.0);
         }
