@@ -37,6 +37,9 @@ fn main(){
             (GET) ["/iain_maitland_resume.pdf"] => {
                 rouille::match_assets(&request, ".")
             },
+            (GET) ["/assets/paintings/{painting}", painting: String] => {
+                rouille::match_assets(&request, ".")
+            },
             (GET) ["/"] => {
                 let index_html = build::page_builder::index_page();
                 Response::html(index_html)

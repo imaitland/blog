@@ -96,14 +96,18 @@ pub fn md_page (contents: String) -> Markup {
 }
 
 pub fn build() -> Result<(),std::io::Error>  {
+
     match fs::create_dir("dist") {
         Ok(_) => {},
         Err(_) => {}
     };
     let index_html = index_page().into_string();
     fs::write("dist/index.html", index_html).expect("Unable to write file");
+
+    // Generate index.html
     let file_index = render::render_html::helpers::generate_index("md");
 
+    // generate .html for each post.
     for file_path in file_index {
         match fs::read_to_string(&file_path) {
             Ok(contents) => {
@@ -118,5 +122,8 @@ pub fn build() -> Result<(),std::io::Error>  {
             }
         }
     }
+
+    // copy assets directory.
+    
     Ok(())
 }
