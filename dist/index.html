@@ -6,7 +6,10 @@ l.readability=function(t,e){var r=l(t),i=l(e);return(n.max(r.getLuminance(),i.ge
 </script><style media="all">html.jsEnabled #NoJS {display: none;}
 
 body {
-    background: #333131;
+    background: #0F2027;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
 }
 
 .posts-index {
@@ -67,7 +70,7 @@ body {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><script>var graph_data = {"nodes":[{"id":"emoji","title":"🍄","tag":"emoji","icon":"💊"},{"id":"data_structures","title":"Data Structures","tag":"rust","icon":"🧬"},{"id":"painting","title":"Painting","tag":"painting","icon":"🐚"},{"id":"chat","title":"Chat","tag":"chat","icon":"🦜"},{"id":"day","title":"Day","tag":"day","icon":"🌞"},{"id":"learning_rust","title":"Rust","tag":"rust","icon":"🦀"},{"id":"resume","title":"Resume","tag":"resume","icon":"🔥"},{"id":"hello_world","title":"Hello World","tag":"testing","icon":"🧃"},{"id":"night","title":"Night","tag":"night","icon":"🌚"},{"id":"about","title":"About","tag":"about","icon":"🩸"},{"id":"ownership_in_rust","title":"Ownership","tag":"rust","icon":"🚕"},{"id":"linked_list","title":"Linked List","tag":"rust","icon":"⛓️"}],"links":[{"source":"data_structures","target":"linked_list"},{"source":"learning_rust","target":"ownership_in_rust"},{"source":"learning_rust","target":"data_structures"},{"source":"hello_world","target":"about"},{"source":"night","target":"day"},{"source":"about","target":"resume"},{"source":"about","target":"learning_rust"},{"source":"about","target":"painting"},{"source":"about","target":"chat"}]}</script></head><div class="logo-front_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div id="graph"></div><div id="NoJS" class="posts-index"><ul><li><a href="emojimode">emojimode</a></li><li><a href="data_structures">data structures</a></li><li><a href="painting">painting</a></li><li><a href="chat">chat</a></li><li><a href="day">day</a></li><li><a href="learning_rust">learning rust</a></li><li><a href="resume">resume</a></li><li><a href="hello_world">hello world</a></li><li><a href="night">night</a></li><li><a href="about">about</a></li><li><a href="ownership_in_rust">ownership in rust</a></li><li><a href="linked_list">linked list</a></li></ul></div><script>document.getElementsByTagName('html')[0].className += ' jsEnabled';
+}</style><script>var graph_data = {"nodes":[{"id":"emoji","title":"🍄","tag":"emoji","icon":"💊"},{"id":"data_structures","title":"Data Structures","tag":"rust","icon":"🧬"},{"id":"painting","title":"Painting","tag":"painting","icon":"🐚"},{"id":"chat","title":"Chat","tag":"chat","icon":"🦜"},{"id":"day","title":"Day","tag":"day","icon":"🌞"},{"id":"learning_rust","title":"Rust","tag":"rust","icon":"🦀"},{"id":"resume","title":"Resume","tag":"resume","icon":"🔥"},{"id":"hello_world","title":"Hello World","tag":"testing","icon":"🧃"},{"id":"night","title":"Night","tag":"night","icon":"🌚"},{"id":"about","title":"About","tag":"about","icon":"🩸"},{"id":"ownership_in_rust","title":"Ownership","tag":"rust","icon":"🚕"},{"id":"linked_list","title":"Linked List","tag":"rust","icon":"⛓️"}],"links":[{"source":"data_structures","target":"linked_list"},{"source":"learning_rust","target":"ownership_in_rust"},{"source":"learning_rust","target":"data_structures"},{"source":"resume","target":"about"},{"source":"hello_world","target":"about"},{"source":"night","target":"day"},{"source":"about","target":"learning_rust"},{"source":"about","target":"painting"},{"source":"about","target":"chat"}]}</script></head><div class="logo-front_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div id="graph"></div><div id="NoJS" class="posts-index"><ul><li><a href="emojimode">emojimode</a></li><li><a href="data_structures">data structures</a></li><li><a href="painting">painting</a></li><li><a href="chat">chat</a></li><li><a href="day">day</a></li><li><a href="learning_rust">learning rust</a></li><li><a href="resume">resume</a></li><li><a href="hello_world">hello world</a></li><li><a href="night">night</a></li><li><a href="about">about</a></li><li><a href="ownership_in_rust">ownership in rust</a></li><li><a href="linked_list">linked list</a></li></ul></div><script>document.getElementsByTagName('html')[0].className += ' jsEnabled';
 
 var boxsize = 60; 
 var zoomIn = true;
@@ -89,7 +92,11 @@ const Graph = ForceGraph()
     var node_dimensions = node.title;
 
     let label = emojimode ? node.icon : node.title;
-    const fontSize = 16/globalScale;
+    
+    // scaling font-size...
+    //const fontSize = 16/globalScale;
+    
+    const fontSize = 6;
     ctx.font = `${fontSize}px Sans-Serif`;
     const textWidth = ctx.measureText(node_dimensions).width;
     const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
@@ -119,12 +126,20 @@ const Graph = ForceGraph()
   })
   .onNodeClick(node => {
     if (node.id == "day") {
-      document.body.style.backgroundColor = "#ebf3ff";
       document.getElementsByClassName("logo")[0].style.color = "black";
+
+      document.body.style.background="#D3CCE3";  /* fallback for old browsers */
+      document.body.style.background="-webkit-linear-gradient(to bottom, #E9E4F0, #D3CCE3)";  /* Chrome 10-25, Safari 5.1-6 */
+      document.body.style.background="linear-gradient(to bottom, #E9E4F0, #D3CCE3)"; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
       nightmode = false;
     } else if (node.id == "night") {
-      document.body.style.backgroundColor = "#333131";
       document.getElementsByClassName("logo")[0].style.color = "white";
+
+      document.body.style.background="#0F2027;";  /* fallback for old browsers */
+      document.body.style.background="-webkit-linear-gradient(to bottom, #2C5364, #203A43, #0F2027)";  /* Chrome 10-25, Safari 5.1-6 */
+      document.body.style.background="linear-gradient(to bottom, #2C5364, #203A43, #0F2027)"; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
       nightmode = true;
     } else if (node.id == "emoji") {
       emojimode = !emojimode;
