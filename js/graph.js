@@ -20,7 +20,11 @@ const Graph = ForceGraph()
     var node_dimensions = node.title;
 
     let label = emojimode ? node.icon : node.title;
-    const fontSize = 16/globalScale;
+    
+    // scaling font-size...
+    //const fontSize = 16/globalScale;
+    
+    const fontSize = 6;
     ctx.font = `${fontSize}px Sans-Serif`;
     const textWidth = ctx.measureText(node_dimensions).width;
     const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
@@ -50,12 +54,20 @@ const Graph = ForceGraph()
   })
   .onNodeClick(node => {
     if (node.id == "day") {
-      document.body.style.backgroundColor = "#ebf3ff";
       document.getElementsByClassName("logo")[0].style.color = "black";
+
+      document.body.style.background="#D3CCE3";  /* fallback for old browsers */
+      document.body.style.background="-webkit-linear-gradient(to bottom, #E9E4F0, #D3CCE3)";  /* Chrome 10-25, Safari 5.1-6 */
+      document.body.style.background="linear-gradient(to bottom, #E9E4F0, #D3CCE3)"; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
       nightmode = false;
     } else if (node.id == "night") {
-      document.body.style.backgroundColor = "#333131";
       document.getElementsByClassName("logo")[0].style.color = "white";
+
+      document.body.style.background="#0F2027;";  /* fallback for old browsers */
+      document.body.style.background="-webkit-linear-gradient(to bottom, #2C5364, #203A43, #0F2027)";  /* Chrome 10-25, Safari 5.1-6 */
+      document.body.style.background="linear-gradient(to bottom, #2C5364, #203A43, #0F2027)"; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
       nightmode = true;
     } else if (node.id == "emoji") {
       emojimode = !emojimode;

@@ -11,7 +11,7 @@ draft = false
 +++
 
 # About
-My name is iain maitland. I'm a software developer in Baltimore, Md. I've worked at a few startups big and small over the last 6 years or so as a frontend and then fullstack developer. If you want to keep it formal, my [resume is here](/resume).
+My name is iain maitland. I'm a software developer in Baltimore, Md. I've worked at a few startups big and small over the last 6 years or so as a frontend and then fullstack developer. If you want to keep it formal, my [resume is here](iain_maitland_resume.pdf).
 
 This website was written in [Rust!](/learning_rust), and you can peruse the repo here:
 
