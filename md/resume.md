@@ -10,4 +10,4 @@ icon = "🔥"
 draft = true
 +++
 
-# Resume!
+See graph.js, Redirects to `iain_maitland_resume.pdf`

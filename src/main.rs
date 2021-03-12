@@ -34,6 +34,9 @@ fn main(){
 
     rouille::start_server(address, move |request| {
         router!(request,
+            (GET) ["/iain_maitland_resume.pdf"] => {
+                rouille::match_assets(&request, ".")
+            },
             (GET) ["/"] => {
                 let index_html = build::page_builder::index_page();
                 Response::html(index_html)

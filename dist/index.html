@@ -128,6 +128,8 @@ const Graph = ForceGraph()
       nightmode = true;
     } else if (node.id == "emoji") {
       emojimode = !emojimode;
+    } else if (node.id == "resume") {
+      location.href = 'iain_maitland_resume.pdf';
     }
     else {
       window.location.href = node.id;
