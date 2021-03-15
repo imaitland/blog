@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="About iain maitland's website"></meta><meta property="og:description" content="About iain maitland's website"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="About"></meta><meta name="twitter:description" content="About iain maitland's website"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>About</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="poems"></meta><meta property="og:description" content="poems"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Poems"></meta><meta name="twitter:description" content="poems"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Poems</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,15 +264,42 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>About</h1>
-<p>My name is iain maitland. I'm a software developer in the USA. I've worked at a few startups big and small over the last 6 years or so as a frontend and then fullstack developer. If you want to keep it formal, my <a href="iain_maitland_resume.pdf" rel="noopener noreferrer">resume is here</a>.</p>
-<p>This website was written in <a href="/learning_rust" rel="noopener noreferrer">Rust!</a>, and you can peruse the repo here:</p>
-<p>I also enjoy, writing, photography, <a href="/poems" rel="noopener noreferrer">poetry</a>, <a href="/painting" rel="noopener noreferrer">painting</a> and memes!</p>
-<p>If you'd like to contact me</p>
-<ul>
-<li>Email: hello@iainmaitland.com</li>
-<li>Chat: Join my public room on the <a href="/chat" rel="noopener noreferrer">Matrix instance</a> that I host.</li>
-</ul>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Poems</h1>
+<h4>Fat Cat</h4>
+<blockquote>
+<p>there's a fat cat on the lawn<br>
+full of his own crotch<br>
+rolling on the scented airs<br>
+purring gently, who cares<br>
+who cares, who cares.</p>
+</blockquote>
+<h4>Pro Dancer</h4>
+<blockquote>
+<p>I am a professional dancer.<br>
+But that does not mean that when I go on holiday I do not dance.</p>
+<p>I went up  onto the dunes just after it had snowed.</p>
+<p>Then I practiced my dance.<br>
+After a while there was a park ranger and a horse standing behind me on the path.</p>
+<p>And no matter how hard he tried he could not get the horse to pass me.<br>
+My dance ended and I let them pass.</p>
+<p>I turned back towards the road and as it became dark,<br>
+I whooped and holered at the trees.</p>
+<p>The ranger returned, there was not much happening in the forest,<br>
+And I let them pass.</p>
+</blockquote>
+<h4>Comedian</h4>
+<blockquote>
+<p>Turns out there're a few things you ought not to<br>
+publicly disparage.</p>
+<p>Like the TSA,<br>
+or other people’s choices.</p>
+<p>Turns out that<br>
+sometimes you think<br>
+you are alone<br>
+but you are not.</p>
+<p>like when you’re talking to your dog<br>
+or riding the bus.  </p>
+</blockquote>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {

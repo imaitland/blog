@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="paintings by iain maitland"></meta><meta property="og:description" content="paintings by iain maitland"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Painting"></meta><meta name="twitter:description" content="paintings by iain maitland"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Painting</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="paintings iain maitland"></meta><meta property="og:description" content="paintings iain maitland"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Paintings"></meta><meta name="twitter:description" content="paintings iain maitland"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Paintings</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -265,7 +265,30 @@ code {
     display: inline-block;
     opacity: 1;
 }</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Paintings</h1>
-<p><img src="https://images.unsplash.com/photo-1577081395884-e70fc91645ad?ixlib=rb-1.2.1&amp;ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;auto=format&amp;fit=crop&amp;w=1919&amp;q=80" alt="test image"></p>
+<p><img src="assets/paintings/6_mile_2015_iain_maitland.jpg" alt="6mile head"></p>
+<hr>
+<p><img src="assets/paintings/baltimore_2015_iain_maitland.jpg" alt="baltimore head"></p>
+<hr>
+<p><img src="assets/paintings/bearded_man_2015_iain_maitland.jpg" alt="bearded man"></p>
+<hr>
+<p><img src="assets/paintings/billboard_2013_iain_maitland.jpg" alt="billboard"></p>
+<hr>
+<p><img src="assets/paintings/dracula_2013_iain_maitland.jpg" alt="dracula"></p>
+<hr>
+<p><img src="assets/paintings/flow_2014_iain_maitland.jpg" alt="davison"></p>
+<hr>
+<p><img src="assets/paintings/gratiot_face_2015_iain_maitland.jpg" alt="gratiot"></p>
+<hr>
+<p><img src="assets/paintings/pylon_2014_iain_maitland.jpg" alt="pylon"></p>
+<hr>
+<p><img src="assets/paintings/trucker_2014_iain_maitland.jpg" alt="trucker"></p>
+<hr>
+<p><img src="assets/paintings/varney_head_2015_iain_maitland.jpg" alt="varney head"></p>
+<hr>
+<p><img src="assets/paintings/woodsman_2014_iain_maitland.jpg" alt="naked man"></p>
+<hr>
+<p><img src="assets/paintings/woodward_man_2015_iain_maitland.jpg" alt="woodward man"></p>
+<hr>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {
