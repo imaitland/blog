@@ -1,5 +1,5 @@
 +++
-title = "Resume"
+title = "Résumé"
 id = "resume"
 author = "iain maitland"
 description = "My Resume"
