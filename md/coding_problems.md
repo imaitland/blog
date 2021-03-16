@@ -14,6 +14,8 @@ draft = false
 
 This is where I'll be keeping track of problem questions as I answer them. I've found that they're an effective way to learn a new language, and crack open some new neurons!
 
+Also on [leetcode](https://leetcode.com/gl2748/)
+
 ## Group Anagrams
 ### Question
 > Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
