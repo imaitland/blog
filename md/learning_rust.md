@@ -21,6 +21,7 @@ As I learn Rust I've been collecting exercises, my thoughts and notes on them he
 - [Ownership in Rust](/ownership_in_rust)
 
 ## Learning Exercises
+- [Coding Problems](/coding_problems)
 - Multi-threaded server implementation
 - Parser Combinator
 - KV store implementation
