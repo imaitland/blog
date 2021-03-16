@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Matrix Chat"></meta><meta property="og:description" content="Matrix Chat"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Chat"></meta><meta name="twitter:description" content="Matrix Chat"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Chat</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Matrix Chat"></meta><meta property="og:description" content="Matrix Chat"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Contact"></meta><meta name="twitter:description" content="Matrix Chat"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Contact</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,12 +264,27 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Chat</h1>
-<p>If you'd like to get a hold of me at short notice, start a correspondence or talk privately. I host a Matrix server at this domain:
-matrix.iainmaitland.com
-If you install a Matrix client, you can join my public room:
-xx yy zz qq. </p>
-<p>If you're curious about hosting a Matrix server yourself, I wrote about my experience.</p>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Email</h1>
+<p>hi@iainmaitland.com</p>
+<h1>Chat</h1>
+<p>If you'd like to get a hold of me at short notice, start a correspondence or talk privately. I host a <a href="https://matrix.org/" rel="noopener noreferrer">Matrix</a> instance at <code>chat.iainmaitland.com</code>.</p>
+<blockquote>
+<p>⚡ <strong>It's very much in a beta state</strong>, mostly because it's running <a href="https://conduit.rs/" rel="noopener noreferrer">conduit.rs</a> with some important federation features missing. Nevertheless it's usable you just have to follow these instructions!</p>
+</blockquote>
+<ul>
+<li>
+<p>Install a <a href="https://element.io/" rel="noopener noreferrer">Matrix client</a></p>
+</li>
+<li>
+<p>Create an account on my homeserver instance <code>chat.iainmaitland.com</code> </p>
+<blockquote>
+<p><strong>Important</strong> the client will typically default to creating an account at <code>username:matrix.org</code> don't do this!</p>
+</blockquote>
+</li>
+<li>
+<p>Once you have created your account - something like <code>username:chat.iainmaitland.com</code> you can login and chat with me!</p>
+</li>
+</ul>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {
