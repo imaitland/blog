@@ -266,8 +266,7 @@ code {
     opacity: 1;
 }</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Ownership in Rust.</h1>
 <h2>Introduction</h2>
-<p>To some extent you can offload the work of holding a mental model of the flow of ownership to the compiler, when it barks at you, you'll snap to attention, start slanging those <code>to_owned()</code>, <code>take()</code>,<code>clone()</code>, <code>*</code> and <code>String::from()</code> .</p>
-<p>However, it's reasonable to assume, having a coherent and correct model of ownership in your software as you write it will keep it idiomatic! After all, ownership is Rust's flagship feature!</p>
+<p>It's reasonable to assume, having a coherent and correct model of ownership in your software as you write it will keep it idiomatic! After all, ownership is Rust's flagship feature!</p>
 <p>Towards this end, here's where I will be putting my notes for all things related to my understanding of ownership. Heavily influenced by the relevant chapter from the rust book.</p>
 <h2>Ownership for you.</h2>
 <p>Ownership consists of 3 things.</p>

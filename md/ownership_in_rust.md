@@ -13,9 +13,7 @@ draft = false
 # Ownership in Rust.
 ## Introduction
 
-To some extent you can offload the work of holding a mental model of the flow of ownership to the compiler, when it barks at you, you'll snap to attention, start slanging those `to_owned()`, `take()`,`clone()`, `*` and `String::from()` .
-
-However, it's reasonable to assume, having a coherent and correct model of ownership in your software as you write it will keep it idiomatic! After all, ownership is Rust's flagship feature!
+It's reasonable to assume, having a coherent and correct model of ownership in your software as you write it will keep it idiomatic! After all, ownership is Rust's flagship feature!
 
 Towards this end, here's where I will be putting my notes for all things related to my understanding of ownership. Heavily influenced by the relevant chapter from the rust book.
 
