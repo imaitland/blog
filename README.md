@@ -38,7 +38,7 @@ The files in the newly created `dist` directory represent your site.
 
 ## Next steps.
 - [ ] Tests!
-- [ ] Post Social / OpenGraph meta / header.
 - [ ] Enable drafts.
+- [x] Post Social / OpenGraph meta / header.
 - [x] Create a static site build command, and host on s3 / netlify / github pages or similar.
 - [ ] Write an image hoster service to make it easy to embed responsive images.

@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Rust related coding problems and answers"></meta><meta property="og:description" content="Rust related coding problems and answers"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Coding Problems"></meta><meta name="twitter:description" content="Rust related coding problems and answers"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Coding Problems</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Working with remainder in Rust"></meta><meta property="og:description" content="Working with remainder in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Remainder"></meta><meta name="twitter:description" content="Working with remainder in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Remainder</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,186 +264,32 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Coding Problems</h1>
-<p>This is where I'll be keeping track of problem questions as I answer them. I've found that they're an effective way to learn a new language, and crack open some new neurons!</p>
-<p>Also on <a href="https://leetcode.com/gl2748/" rel="noopener noreferrer">leetcode</a></p>
-<h2>Working with Strings</h2>
-<h3>Question</h3>
-<blockquote>
-<p>Split a string into a vector of strings.</p>
-</blockquote>
-<h3>Solution</h3>
-<pre><code>let a = String::from("hello");
-let b: Vec&lt;String&gt; = a.chars.map(|c|{String::from(c)}).collect();
-println!("{:?}", b);
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Understanding <code>%</code> and <code>rem_euclid()</code> in Rust.</h1>
+<p>For two positive numbers, <code>%</code> and <code>rem_euclid</code> methods behave the same way, both will give you the remainder for the division of one number by another. Where they are different is how they treat negative numbers. Or Rather, where some confusion arrises is in deciding what convention to adopt. In some contexts having a negative remainder makes sense, in others it does not. Generally, negative remainders are not really useful.</p>
+<ul>
+<li>In Rust <code>%</code> Remainder will always return a remainder matching the sign of the left hand side of the operation:</li>
+</ul>
+<pre><code>println!("{}", 6 % -4); // expect 2.
+println!("{}", -10 % 7); // expect -3.
 </code></pre>
-<h3>Question</h3>
-<blockquote>
-<p>Convert a vector of strings into a string?</p>
-</blockquote>
-<h3>Solution</h3>
-<pre><code>b.into_iter().collect::&lt;String&gt;()
-</code></pre>
-<p>Note: <code>into_iter()</code> will consume <code>b</code>, <code>iter()</code> will give you an iterator over references, which will not collect into a String so easily, since it is a bundle of references.</p>
-<h3>Question</h3>
-<blockquote>
-<p>Convert a String into a number</p>
-</blockquote>
-<h3>Solution</h3>
-<pre><code>let a = String::from("123");
-let num: i32 = c.parse().unwrap();
-</code></pre>
-<h3>Question</h3>
-<blockquote>
-<p>Pattern match on a char type</p>
-</blockquote>
-<h3>Solution</h3>
-<pre><code>match c.to_string().as_str() {
-    "a" =&gt; {},
-    "b" =&gt; {},
-    "c" =&gt; {},
-    _ =&gt; {}
-}
-</code></pre>
-<h2>Group Anagrams</h2>
-<h3>Question</h3>
-<blockquote>
-<p>Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.</p>
-</blockquote>
-<h3>Solution</h3>
-<pre><code>use std::collections::HashMap;
-use std::collections::hash_map::Entry;
+<p>This means we might have a negative remainder. In cases where this is not desired, how do we find the remainder?</p>
+<p><code>rem_euclid()</code> provides an alternative and is generally preffered.</p>
+<pre><code>let a: i32 = -10;
+let b: i32 = 7;
 
-impl Solution {
-    
-    pub fn get_key (s: &amp;String) -&gt; String {
-        let mut x: Vec&lt;char&gt; = s.chars().collect();
-        x.sort();
-        let mut y = x.iter().collect::&lt;String&gt;();
-        y
-    }
-    
-    pub fn group_anagrams(strs: Vec&lt;String&gt;) -&gt; Vec&lt;Vec&lt;String&gt;&gt; {
-        
-        let mut dict: HashMap&lt;String, Vec&lt;String&gt;&gt; = HashMap::new();
-        for s in strs {
-            let key = Solution::get_key(&amp;s);
-            match dict.entry(key.to_owned()) {
-                Entry::Occupied(mut e) =&gt; {
-                    e.get_mut().push(s)
-                },
-                Entry::Vacant(e) =&gt; {
-                    dict.insert(key, vec![s]);
-                }
-            }
-        }
-        
-        let mut result = vec![];
-        
-        for (k, v) in dict {
-            result.push(v);
-        }
-        
-        result
-        
-    }
-}
-</code></pre>
-<h3>Notes</h3>
-<p>The key here is understanding that all anagrams look the same when you sort their individual characters, for example eat and tea, both become aet. We therefore use the sorted version of a word as the key for our HashMap, thereby guaranteeing that anagrams for a word will all be keyed the same.</p>
-<p>Generally it is good to note that finding the correct key for a HashMap can be very helpful.</p>
-<h3>Rust takeaways:</h3>
-<ul>
-<li>You can pattern match on a HashMap entry, to check if it is vacant or occupied.</li>
-<li>To split a <code>String</code> you can do: <code>some_string.chars().collect();</code></li>
-<li>You can <code>collect</code> an iterable to a type, for example <code>some_vector.iter().collect::&lt;String&gt;();</code> turns a <code>Vector</code> of characters into a <code>String</code></li>
-</ul>
-<h2>Intersection of two arrays 2</h2>
-<h3>Question</h3>
-<blockquote>
-<p>Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must appear as many times as it shows in both arrays and you may return the result in any order.</p>
-</blockquote>
-<h3>Solution</h3>
-<h4>First attempt</h4>
-<pre><code>use std::collections::HashMap;
-use std::collections::hash_map::Entry;
+let c: i32 = -20;
+let d: i32 = 8;
 
-impl Solution {
-    pub fn vec_to_hashmap(arr: &amp;Vec&lt;i32&gt;) -&gt; HashMap&lt;i32, Vec&lt;i32&gt;&gt; {
-        
-        let mut hm: HashMap&lt;i32, Vec&lt;i32&gt;&gt; = HashMap::new();
-        let mut count = 0;
-        
-        for n in arr {
-            match hm.entry(*n) {
-                Entry::Occupied(mut l) =&gt; {
-                    l.get_mut().push(count);
-                },
-                Entry::Vacant(_) =&gt; {
-                    hm.insert(*n, vec![count]);
-                }
-            }
-            count +=1;
-        }
-        hm
-        
-    }
-    pub fn intersect(nums1: Vec&lt;i32&gt;, nums2: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
-        
-        let mut hm_1: HashMap&lt;i32, Vec&lt;i32&gt;&gt; = Solution::vec_to_hashmap(&amp;nums1);
-        let mut hm_2: HashMap&lt;i32, Vec&lt;i32&gt;&gt; = Solution::vec_to_hashmap(&amp;nums2);
-        
-        let mut result: Vec&lt;i32&gt; = vec![];
-        
-        for num in nums1 {
-            if hm_1.get(&amp;num).is_some() {
-                let mut p = hm_1.remove(&amp;num).unwrap();
-                match hm_2.remove(&amp;num) {
-                    Some(mut q) =&gt; {
-                        if q.len() &gt; p.len() {
-                            for i in p {
-                                result.append(&amp;mut vec![num]);
-                            }
-                        } else {
-                            for i in q {
-                                result.append(&amp;mut vec![num])
-                            }
-                        }
-                    },
-                    None =&gt; {}
-                }
-            }
-        }
+println!("{}", a % b); // -3
+println!("{}", a.rem_euclid(b)); // 4
 
-        result
-    }
-}
+println!("{}", c.rem_euclid(d)); // 4
 </code></pre>
-<h3>Notes</h3>
-<p>When coming up with this solution I found the following useful methods:</p>
-<ul>
-<li><code>HashMap::remove(k)</code>, which removes a key from an hash map and returns its value.</li>
-</ul>
-<p>When coming up with this solution I encountered these pain points.</p>
-<ul>
-<li>I wanted to find the shorter of the two lists.
-<ul>
-<li>Use the method <a href="https://doc.rust-lang.org/std/cmp/fn.min.html" rel="noopener noreferrer"><code>min(x,y)</code></a> which compares and returns the minimum of two values.</li>
-</ul>
-</li>
-<li>I wanted to convert a <code>Vec</code> to a <code>HashMap</code> in a less long winded way.
-<ul>
-<li>I found the method <a href="https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.or_insert" rel="noopener noreferrer"><code>or_insert</code></a> on HashMap</li>
-</ul>
-<pre><code>let mut letters = HashMap::new();
-
-for ch in "a short treatise on fungi".chars() {
-    let counter = letters.entry(ch).or_insert(0);
-    *counter += 1;
-}
-</code></pre>
-</li>
-</ul>
+<h4>So what's happening here?!</h4>
+<p>Note the different results, 
+<code>a % b</code> is <code>-3</code> because it's simply calculated the remainder. </p>
+<p><code>a.rem_euclid(b)</code> is <code>4</code> because we take the first quotient of b that overshoots <code>-10</code>, and then add a number to walk back to our target, in this case: <code>7 * -2 = -14</code>, <code>-14 + 4 = 10</code>, so our 'remainder' is 4.</p>
+<p>Similarly, the remainder from dividing -20 by 8, is <code>8 * -3 = -24</code> which we walk back to <code>-20</code> by adding <code>4</code>, so our, 'remainder' is 4.</p>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {

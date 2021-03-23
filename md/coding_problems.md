@@ -16,6 +16,46 @@ This is where I'll be keeping track of problem questions as I answer them. I've 
 
 Also on [leetcode](https://leetcode.com/gl2748/)
 
+## Working with Strings
+### Question
+> Split a string into a vector of strings.
+
+### Solution
+```
+let a = String::from("hello");
+let b: Vec<String> = a.chars.map(|c|{String::from(c)}).collect();
+println!("{:?}", b);
+```
+
+### Question
+> Convert a vector of strings into a string?
+
+### Solution
+```
+b.into_iter().collect::<String>()
+```
+Note: `into_iter()` will consume `b`, `iter()` will give you an iterator over references, which will not collect into a String so easily, since it is a bundle of references.
+
+
+### Question
+> Convert a String into a number
+### Solution
+```
+let a = String::from("123");
+let num: i32 = c.parse().unwrap();
+```
+### Question
+> Pattern match on a char type
+### Solution
+```
+match c.to_string().as_str() {
+    "a" => {},
+    "b" => {},
+    "c" => {},
+    _ => {}
+}
+```
+
 ## Group Anagrams
 ### Question
 > Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
@@ -71,3 +111,82 @@ Generally it is good to note that finding the correct key for a HashMap can be v
  - You can pattern match on a HashMap entry, to check if it is vacant or occupied.
  - To split a `String` you can do: `some_string.chars().collect();`
  - You can `collect` an iterable to a type, for example `some_vector.iter().collect::<String>();` turns a `Vector` of characters into a `String`
+
+## Intersection of two arrays 2
+### Question
+> Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must appear as many times as it shows in both arrays and you may return the result in any order.
+### Solution
+#### First attempt
+```
+use std::collections::HashMap;
+use std::collections::hash_map::Entry;
+
+impl Solution {
+    pub fn vec_to_hashmap(arr: &Vec<i32>) -> HashMap<i32, Vec<i32>> {
+        
+        let mut hm: HashMap<i32, Vec<i32>> = HashMap::new();
+        let mut count = 0;
+        
+        for n in arr {
+            match hm.entry(*n) {
+                Entry::Occupied(mut l) => {
+                    l.get_mut().push(count);
+                },
+                Entry::Vacant(_) => {
+                    hm.insert(*n, vec![count]);
+                }
+            }
+            count +=1;
+        }
+        hm
+        
+    }
+    pub fn intersect(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
+        
+        let mut hm_1: HashMap<i32, Vec<i32>> = Solution::vec_to_hashmap(&nums1);
+        let mut hm_2: HashMap<i32, Vec<i32>> = Solution::vec_to_hashmap(&nums2);
+        
+        let mut result: Vec<i32> = vec![];
+        
+        for num in nums1 {
+            if hm_1.get(&num).is_some() {
+                let mut p = hm_1.remove(&num).unwrap();
+                match hm_2.remove(&num) {
+                    Some(mut q) => {
+                        if q.len() > p.len() {
+                            for i in p {
+                                result.append(&mut vec![num]);
+                            }
+                        } else {
+                            for i in q {
+                                result.append(&mut vec![num])
+                            }
+                        }
+                    },
+                    None => {}
+                }
+            }
+        }
+
+        result
+    }
+}
+```
+### Notes
+When coming up with this solution I found the following useful methods:
+- `HashMap::remove(k)`, which removes a key from an hash map and returns its value.
+
+When coming up with this solution I encountered these pain points.
+- I wanted to find the shorter of the two lists.
+    - Use the method [`min(x,y)`](https://doc.rust-lang.org/std/cmp/fn.min.html) which compares and returns the minimum of two values.
+- I wanted to convert a `Vec` to a `HashMap` in a less long winded way.
+    - I found the method [`or_insert`](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.or_insert) on HashMap
+    ```
+    let mut letters = HashMap::new();
+
+    for ch in "a short treatise on fungi".chars() {
+        let counter = letters.entry(ch).or_insert(0);
+        *counter += 1;
+    }
+    ```
+

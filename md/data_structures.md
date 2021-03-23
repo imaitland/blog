@@ -10,7 +10,9 @@ icon = "🧬"
 draft = false
 +++
 
+# Computer science basics.
+- [Binary](/binary)
+
 # Data Structures implemented in Rust.
 
 - [Linked List](/linked_list)
-
