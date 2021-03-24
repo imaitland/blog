@@ -12,6 +12,8 @@ draft = false
 
 # Linked List
 
+This post relies heavily on this excellent post, [Learn Rust with Entirely Too Many Linked Lists.](https://rust-unofficial.github.io/too-many-lists/)
+
 ## first pass.
 
 This linked list with `new` and `push` implementations demonstrates and important concept regarding Ownership.

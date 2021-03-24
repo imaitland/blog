@@ -1,6 +1,6 @@
 +++
-title = "Binary"
-id = "binary"
+title = "Bit Manipulation"
+id = "bit_manipulation"
 author = "iain maitland"
 description = "Working with binary in Rust"
 date = 2021-02-27

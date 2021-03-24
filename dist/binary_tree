@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="A Linked List in Rust"></meta><meta property="og:description" content="A Linked List in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Linked List"></meta><meta name="twitter:description" content="A Linked List in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Linked List</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="A binary tree in Rust"></meta><meta property="og:description" content="A binary tree in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Binary Tree"></meta><meta name="twitter:description" content="A binary tree in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Binary Tree</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,124 +264,241 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Linked List</h1>
-<p>This post relies heavily on this excellent post, <a href="https://rust-unofficial.github.io/too-many-lists/" rel="noopener noreferrer">Learn Rust with Entirely Too Many Linked Lists.</a></p>
-<h2>first pass.</h2>
-<p>This linked list with <code>new</code> and <code>push</code> implementations demonstrates and important concept regarding Ownership.</p>
-<pre><code>#![allow(unused)]
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Binary Tree.</h1>
+<h3>Creating a Binary Tree</h3>
+<p>As I am still new to rust I often start by writing out the code without thinking about ownership, and then using the compiler to drive further development.Surprisingly, the following is very close to my first pass at implementing a Binary Tree. This was in a large part possible after having read this <a href="https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370" rel="noopener noreferrer">gist</a>.</p>
+<pre><code>#[derive(Debug)]
+struct TreeNode&lt;T&gt; {
+    val: T,
+    left: Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;,
+    right: Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;
+}
+
+impl &lt;T&gt; TreeNode&lt;T&gt; {
+    pub fn new(val: T) -&gt; Self {
+        TreeNode {
+            val,
+            left: None,
+            right: None
+        }
+    }
+}
+
+
 fn main() {
-    struct List&lt;T&gt; {
-        head: Link&lt;T&gt;
-    };
-    
-    type Link&lt;T&gt; = Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;;
-    
-    struct Node&lt;T&gt; {
-        elem: T,
-        next: Link&lt;T&gt;
-    }
-    
-    impl&lt;T&gt; List&lt;T&gt; {
-    
-        fn new() -&gt; Self {
-            List {
-                head: None
-            }
-        }
-        
-        fn push(&amp;mut self, e: T) {
-            let new_node = Box::new(Node {
-                elem: e,
-                next: self.head
-            });
-            self.head = Some(new_node);
-        }
-        
-    }
+    let my_tree = TreeNode::new(32);
+    println!("{:?}", my_tree);
 }
 </code></pre>
-<p>In the above implementation, there's the following compilation error:</p>
-<pre><code>31 |                 next: self.head
-   |                       ^^^^^^^^^
-   |                       |
-   |                       move occurs because `self.head` has type `Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;`, which does not implement the `Copy` trait
-   |                       help: consider borrowing the `Option`'s content: `self.head.as_ref()`
-</code></pre>
-<p>Understanding the problem:</p>
-<ol>
-<li>
-<p>The variable <code>self</code> enters the push method as a mutable reference to the List.</p>
-</li>
-<li>
-<p>The mutable reference to a value   has its ownership moved to from the variable <code>self.head</code> to the variable <code>new_node.next</code>:</p>
-</li>
-</ol>
-<ul>
-<li>At this point, <code>self.head</code> is a variable without a value...
-<ul>
-<li>Another way of putting this would be to say that the value has two owners, <code>self.head</code> and <code>new_node.next</code>.</li>
-</ul>
-</li>
-<li>We know that we'll later give <code>self.head</code> a valid value - <code>Some(new_node)</code></li>
-<li><strong>BUT</strong> the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing <code>self.head</code> and it pointing to a location in memory that it does not own, or that does not exist! We're violating the rule that a value can only have one owner.</li>
-</ul>
-<ol start="3">
-<li>Therefore we need a way of passing ownership to <code>new_node.next</code> while stuffing a pacifier in <code>self.head</code>'s mouth to stop it crying out, at least until we can give it a useful value...</li>
-</ol>
-<p>The Solution.</p>
-<p>Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives <code>new_node.next</code> ownership of a <em>reference</em>, but in this case, the <code>next</code> field of the Node struct cannot be a reference.</p>
-<p>Our solution is: <a href="https://doc.rust-lang.org/std/mem/fn.take.html" rel="noopener noreferrer"><code>take</code></a> in the docs it states:</p>
+<h4>The Box Smart Pointer.</h4>
+<p>At this point perhaps the most exotic thing about our implementation is the use of the <code>Box&lt;T&gt;</code> smart pointer. In Rust a smart pointer lets us give a variable a value of undetermined (at compile time) size. As we would expect, the value is stored on the heap, while the pointer to it, the variable is stored on the stack.</p>
+<h4>But why do we say that the size of our value, is not known at compile time?</h4>
+<p>In this case the contents of the <code>Box</code> is a left or right branch of the Binary Tree, which itself contains more Binary Trees, possibly for ever. For this reason the size of the leaves of the node are not known at compile time. </p>
 <blockquote>
-<p>... allows taking ownership of a struct field by replacing it with an "empty" value. Without take you can run into issues...</p>
+<p><strong>Takeaway:</strong> In this case the <code>Box</code> smart pointer allows us to have a recursive data type.</p>
 </blockquote>
-<p>In our language, we use "empty" as a pacifier for the <code>self.head</code> variable, until we can assign it an useful value.</p>
-<p>Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop and find method!</p>
-<pre><code>struct List&lt;T&gt; {
-    head: Link&lt;T&gt;
+<h2>Binary Tree Insertion.</h2>
+<p>Right now we can create a new binary tree, let's go a step further and see how adding nodes to it works out.</p>
+<pre><code>#[derive(Debug)]
+struct TreeNode&lt;T&gt; {
+    val: T,
+    left: Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;,
+    right: Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;
 }
 
-type Link&lt;T&gt; = Option&lt;&lt;Box&lt;T&gt;&gt;&gt;
-
-struct Node&lt;T&gt; = {
-    elem: T,
-    next: Link&lt;T&gt;
+impl &lt;T&gt; TreeNode&lt;T&gt; {
+    pub fn new(val: T) -&gt; Self {
+        TreeNode {
+            val,
+            left: None,
+            right: None
+        }
+    }
+    pub fn insert(&amp;mut self, val: T) {
+        self.left = Some(Box::new(TreeNode::new(val)));
+    }
 }
 
-impl&lt;T&gt; List&lt;T&gt; {
-    new() -&gt; Self {
-        List {
-            head: None
-        }
-    }
-    push(&amp;mut self, e: T) {
-        let new_node = Node {
-            elem: e,
-            next: self.head.take()
-        }
-       self.head = new_node
-    }
-    pop(&amp;mut self) -&gt; Option&lt;T&gt; {
-        match self.head.take() { // after calling self.head.take(), self.head gets the 'empty' pacifier.
-            None =&gt; None,
-            Some(n) =&gt; {
-                self.head = n.next; // here we rehydrate the empty self.head with something meanigful.
-                Some(n.elem)
-            }
-        }
-    }
-    find(&amp;self, needle: T, curr: Node&lt;T&gt;) -&gt; Option&lt;Node&lt;T&gt;&gt; {
-        match self.head {
-            None =&gt; None,
-            Some(n) =&gt; {
-                if (n.elem) == needle {
-                    return n
-                }
-            }
-        }
 
+fn main() {
+    let mut my_tree = TreeNode::new(32);
+    println!("Initial Tree: {:?}", my_tree);
+    my_tree.insert(15);
+    println!("After Insert: {:?}", my_tree);
+}
+</code></pre>
+<p>Here we simply insert a <code>TreeNode</code> on the left hand branch of our Binary Tree. This is a bit limited, so let's consider how it can be improved.</p>
+<ol>
+<li>If the Tree already has the value, do not insert it.</li>
+<li>Only insert if the <code>TreeNode</code> has an unoccupied branch - i.e. <code>None</code> as the left or right branch.</li>
+<li>If both branches have nodes, move down to one of the branches, continue until an unoccupied branch is found.
+3i. When deciding which branch to move into, go left if the Node's value is more than the value to be inserted, and go right if not.</li>
+</ol>
+<pre><code>pub fn insert(&amp;mut self, v: T) {
+    if self.val == v {
+        return;
+    }
+    
+    let target_node = if v &lt; self.val {&amp;mut self.left} else {&amp;mut self.right};
+    
+    match target_node {
+        None =&gt; {
+            let new_node = Box::new(TreeNode::new(v));
+            target_node = Some(new_node);
+        },
+        Some(node) =&gt; {
+            node.insert(v)
+        }
     }
 }
 </code></pre>
+<p>There are two important details here, that are not immediately obvious:</p>
+<ol>
+<li>the variable <code>target_node</code> gets a mutable reference to the left or right node. Meaning we can mutate it directly with <code>target_node = new_node</code>, at least that's what we'd expect, however, trying to compile the above results in the following error:</li>
+</ol>
+<pre><code>error[E0308]: mismatched types
+  --&gt; src/main.rs:27:31
+   |
+27 |                 target_node = Some(new_node);
+   |                               ^^^^^^^^^^^^^^ expected mutable reference, found enum `Option`
+   |
+   = note: expected mutable reference `&amp;mut Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;`
+                           found enum `Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;`
+help: consider dereferencing here to assign to the mutable borrowed piece of memory
+   |
+27 |                 *target_node = Some(new_node);
+   |                 ^^^^^^^^^^^^
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `playground`
+
+To learn more, run the command again with --verbose.
+</code></pre>
+<p>This is not compiling because of mismatched types, <code>target_node</code> expects a mutable reference to some data in memory, and instead it's getting a chunk of data in memory. We could make <code>Some(new_node)</code> a reference, but that's not what our <code>TreeNode</code> expects the value of it's <code>left</code> or <code>right</code> branches to be.</p>
+<p>Usefully the compiler provides some help:</p>
+<pre><code>&gt; help: consider dereferencing here to assign to the mutable borrowed piece of memory
+   |
+27 |                 *target_node = Some(new_node);
+   |                 ^^^^^^^^^^^^
+</code></pre>
+<p>What it is suggesting, correctly is that we should assign to the "mutable borrowed piece of memory" that the variable <code>target_node</code> points to. To do this we dereference the <code>target_node</code> variable, which could either be, <code>&amp;mut self.left</code> or <code>&amp;mut self.right</code>, and in doing so, convert it into a mutable piece of memory, rather than a mere reference.</p>
+<p>A more long winded way of doing this would be:</p>
+<pre><code>match target_node {
+    None =&gt; {
+        if v &lt; self.val {
+            self.left = Some(Box::new(TreeNode::new(v)));
+        } else {
+            self.right = Some(Box::new(TreeNode::new(v)));
+        }
+    },
+    Some(node) =&gt; {
+        node.insert(v)
+    }
+}
+</code></pre>
+<p>But let's use the compiler's suggestion:</p>
+<pre><code>let target_node = if v &lt; self.val {&amp;mut self.left} else {&amp;mut self.right};
+
+match target_node {
+    None =&gt; {
+        let new_node = Box::new(TreeNode::new(v));
+        *target_node = Some(new_node);
+    },
+    Some(node) =&gt; {
+        node.insert(v)
+    }
+}
+</code></pre>
+<h2>Binary Tree Traversal</h2>
+<pre><code>pub fn traverse(&amp;self) {
+    println!("{:?}", self.val);
+    if let Some(l) = &amp;self.left {
+        l.traverse();
+    }
+    if let Some(r) = &amp;self.right {
+        r.traverse();
+    }
+}
+</code></pre>
+<p>This traversal prints the node value followed by the left and right nodes. This is known as pre-order traversal.</p>
+<p>There are two other types of traversal are in-order traversal and post-order traversal.</p>
+<ul>
+<li><em>Preorder Traversal</em> - <code>Current Node, Left Node, Right</code></li>
+<li><em>Inorder Traversal</em> - <code>Left, Current, Right</code></li>
+<li><em>Postorder Traversal</em> - <code>Left, Right, Current</code></li>
+</ul>
+<p>We can match for the traversal order that we want like, leaving us with this <code>Binary Tree</code> implementation:</p>
+<pre><code>#[derive(Clone, Copy)]
+enum Order {
+    Pre,
+    In,
+    Post
+}
+
+#[derive(Debug)]
+struct TreeNode&lt;T&gt; {
+    val: T,
+    left: Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;,
+    right: Option&lt;Box&lt;TreeNode&lt;T&gt;&gt;&gt;
+}
+
+impl &lt;T: std::cmp::PartialEq + std::cmp::PartialOrd + std::fmt::Debug&gt; TreeNode&lt;T&gt; {
+    pub fn new(val: T) -&gt; Self {
+        TreeNode {
+            val,
+            left: None,
+            right: None
+        }
+    }
+    pub fn insert(&amp;mut self, v: T) {
+        if self.val == v {
+            return;
+        }
+        let target_node = if v &lt; self.val {&amp;mut self.left} else {&amp;mut self.right};
+        match target_node {
+            None =&gt; {
+                let new_node = Box::new(TreeNode::new(v));
+                *target_node = Some(new_node);
+            },
+            Some(node) =&gt; {
+                node.insert(v)
+            }
+        }
+    }
+    pub fn traverse(&amp;self, order: Order) {
+            
+        if let Order::Pre = order {
+            println!("{:?}", self.val);
+        }
+        if let Some(l) = &amp;self.left {
+            l.traverse(order);
+        }
+        if let Order::In = order {
+            println!("{:?}", self.val);
+        }
+        if let Some(r) = &amp;self.right {
+            r.traverse(order);
+        }
+        if let Order::Post = order {
+            println!("{:?}", self.val);
+        }
+    }
+}
+
+
+fn main() {
+    let mut my_tree = TreeNode::new(32);
+    println!("Initial Tree: {:?}", my_tree);
+    my_tree.insert(15);
+    println!("After Insert: {:?}", my_tree);
+    my_tree.traverse(Order::Pre);
+    my_tree.traverse(Order::In);
+    my_tree.traverse(Order::Post);
+}
+</code></pre>
+<p>Which altogether isn't too bad! In a follow up I will look at the time and space complexity of different operations on our Tree as well as exploring enhancing it, for example creating a balanced binary tree.</p>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {

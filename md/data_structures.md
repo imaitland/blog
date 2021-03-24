@@ -11,8 +11,9 @@ draft = false
 +++
 
 # Computer science basics.
-- [Binary](/binary)
+- [Bit manipulation](/bit_manipulation)
 
 # Data Structures implemented in Rust.
 
 - [Linked List](/linked_list)
+- [Binary Tree](/binary_tree)

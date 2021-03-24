@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="A Linked List in Rust"></meta><meta property="og:description" content="A Linked List in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Linked List"></meta><meta name="twitter:description" content="A Linked List in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Linked List</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Working with binary in Rust"></meta><meta property="og:description" content="Working with binary in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Bit Manipulation"></meta><meta name="twitter:description" content="Working with binary in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Bit Manipulation</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,124 +264,66 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Linked List</h1>
-<p>This post relies heavily on this excellent post, <a href="https://rust-unofficial.github.io/too-many-lists/" rel="noopener noreferrer">Learn Rust with Entirely Too Many Linked Lists.</a></p>
-<h2>first pass.</h2>
-<p>This linked list with <code>new</code> and <code>push</code> implementations demonstrates and important concept regarding Ownership.</p>
-<pre><code>#![allow(unused)]
-fn main() {
-    struct List&lt;T&gt; {
-        head: Link&lt;T&gt;
-    };
-    
-    type Link&lt;T&gt; = Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;;
-    
-    struct Node&lt;T&gt; {
-        elem: T,
-        next: Link&lt;T&gt;
-    }
-    
-    impl&lt;T&gt; List&lt;T&gt; {
-    
-        fn new() -&gt; Self {
-            List {
-                head: None
-            }
-        }
-        
-        fn push(&amp;mut self, e: T) {
-            let new_node = Box::new(Node {
-                elem: e,
-                next: self.head
-            });
-            self.head = Some(new_node);
-        }
-        
-    }
-}
-</code></pre>
-<p>In the above implementation, there's the following compilation error:</p>
-<pre><code>31 |                 next: self.head
-   |                       ^^^^^^^^^
-   |                       |
-   |                       move occurs because `self.head` has type `Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;`, which does not implement the `Copy` trait
-   |                       help: consider borrowing the `Option`'s content: `self.head.as_ref()`
-</code></pre>
-<p>Understanding the problem:</p>
-<ol>
-<li>
-<p>The variable <code>self</code> enters the push method as a mutable reference to the List.</p>
-</li>
-<li>
-<p>The mutable reference to a value   has its ownership moved to from the variable <code>self.head</code> to the variable <code>new_node.next</code>:</p>
-</li>
-</ol>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Binary</h1>
+<p>Binary is a way to write any number as a sum of 2 to the power of n. Where n is the position of the factor of 2 in the binary string.</p>
+<p>For example:</p>
 <ul>
-<li>At this point, <code>self.head</code> is a variable without a value...
-<ul>
-<li>Another way of putting this would be to say that the value has two owners, <code>self.head</code> and <code>new_node.next</code>.</li>
+<li><code>1 = 2^0 = 1</code></li>
+<li><code>10 = 2^1 + 0 = 2</code></li>
+<li><code>100 = 2^2 + 0 + 0 = 4</code></li>
+<li><code>111 = 2^2 + 2^1 + 2^0 = 4 + 2 + 1 = 7</code></li>
 </ul>
-</li>
-<li>We know that we'll later give <code>self.head</code> a valid value - <code>Some(new_node)</code></li>
-<li><strong>BUT</strong> the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing <code>self.head</code> and it pointing to a location in memory that it does not own, or that does not exist! We're violating the rule that a value can only have one owner.</li>
-</ul>
-<ol start="3">
-<li>Therefore we need a way of passing ownership to <code>new_node.next</code> while stuffing a pacifier in <code>self.head</code>'s mouth to stop it crying out, at least until we can give it a useful value...</li>
-</ol>
-<p>The Solution.</p>
-<p>Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives <code>new_node.next</code> ownership of a <em>reference</em>, but in this case, the <code>next</code> field of the Node struct cannot be a reference.</p>
-<p>Our solution is: <a href="https://doc.rust-lang.org/std/mem/fn.take.html" rel="noopener noreferrer"><code>take</code></a> in the docs it states:</p>
-<blockquote>
-<p>... allows taking ownership of a struct field by replacing it with an "empty" value. Without take you can run into issues...</p>
-</blockquote>
-<p>In our language, we use "empty" as a pacifier for the <code>self.head</code> variable, until we can assign it an useful value.</p>
-<p>Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop and find method!</p>
-<pre><code>struct List&lt;T&gt; {
-    head: Link&lt;T&gt;
-}
-
-type Link&lt;T&gt; = Option&lt;&lt;Box&lt;T&gt;&gt;&gt;
-
-struct Node&lt;T&gt; = {
-    elem: T,
-    next: Link&lt;T&gt;
-}
-
-impl&lt;T&gt; List&lt;T&gt; {
-    new() -&gt; Self {
-        List {
-            head: None
-        }
-    }
-    push(&amp;mut self, e: T) {
-        let new_node = Node {
-            elem: e,
-            next: self.head.take()
-        }
-       self.head = new_node
-    }
-    pop(&amp;mut self) -&gt; Option&lt;T&gt; {
-        match self.head.take() { // after calling self.head.take(), self.head gets the 'empty' pacifier.
-            None =&gt; None,
-            Some(n) =&gt; {
-                self.head = n.next; // here we rehydrate the empty self.head with something meanigful.
-                Some(n.elem)
+<p>It is common to have to convert binary numbers to regular numbers and vice versa.</p>
+<p>As an aside, to convert decimal numbers to binary we will be using Rust's <code>%</code> remainder operator, not <code>rem_euclid()</code> <a href="/remainder" rel="noopener noreferrer">I wrote a little about their difference.</a></p>
+<h3>Convert regular number to binary.</h3>
+<pre><code>fn convert_to_binary(input: i32) -&gt; Vec&lt;i32&gt;{
+    let mut current = input;
+    let mut binary = vec![];
+    while current &gt; 0 {
+        match current % 2 {
+            0 =&gt; {
+                binary.push(0);
+                current = current/2;
+            },
+            1 =&gt; {
+                binary.push(1);
+                current = (current-1)/2;
             }
         }
-    }
-    find(&amp;self, needle: T, curr: Node&lt;T&gt;) -&gt; Option&lt;Node&lt;T&gt;&gt; {
-        match self.head {
-            None =&gt; None,
-            Some(n) =&gt; {
-                if (n.elem) == needle {
-                    return n
-                }
-            }
-        }
-
-    }
+    } 
+    binary
 }
 </code></pre>
+<h3>Convert a binary number to a regular number.</h3>
+<pre><code>fn convert_to_regular(input: Vec&lt;i32&gt;) -&gt; i32 {
+    let mut result = 0;
+    for i in 0..input.len() {
+        match input[i] {
+            0 =&gt; {
+                result += 0;
+            },
+            1 =&gt; {
+                let new_value = 2.pow(input.len() -1 -i ); // 
+                result += result + new_value;
+            }
+        }
+    }
+    result
+}
+</code></pre>
+<h4>Understanding 2's complement.</h4>
+<p>We must find a way to represent negative numbers in binary.</p>
+<ul>
+<li>For a positive number, represented in binary, flip its bits (1's complement) and add 1 to get its negative representation in binary.</li>
+</ul>
+<pre><code>0101 = 5;
+1010 = -8 + 2 = -6
+Remember the +1!
+1011 = -8 + 2 + 1 = -5
+</code></pre>
+<ul>
+<li>Note, we can identify negative numbers in binary that can represent them because they begin with 1.</li>
+</ul>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {
