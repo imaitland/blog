@@ -265,7 +265,7 @@ code {
     display: inline-block;
     opacity: 1;
 }</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Understanding <code>%</code> and <code>rem_euclid()</code> in Rust.</h1>
-<p>For two positive numbers, <code>%</code> and <code>rem_euclid</code> methods behave the same way, both will give you the remainder for the division of one number by another. Where they are different is how they treat negative numbers. Or Rather, where some confusion arrises is in deciding what convention to adopt. In some contexts having a negative remainder makes sense, in others it does not. Generally, negative remainders are not really useful.</p>
+<p>For two positive numbers, <code>%</code> and <code>rem_euclid</code> methods behave the same way, both will give you the remainder for the division of one number by another. Where they are different is how they treat negative numbers. Or rather, where some confusion arises is in deciding what convention to adopt. In some contexts having a negative remainder makes sense, in others it does not. Generally, negative remainders are unconventional.</p>
 <ul>
 <li>In Rust <code>%</code> Remainder will always return a remainder matching the sign of the left hand side of the operation:</li>
 </ul>
@@ -273,7 +273,7 @@ code {
 println!("{}", -10 % 7); // expect -3.
 </code></pre>
 <p>This means we might have a negative remainder. In cases where this is not desired, how do we find the remainder?</p>
-<p><code>rem_euclid()</code> provides an alternative and is generally preffered.</p>
+<p><code>rem_euclid()</code> provides an alternative.</p>
 <pre><code>let a: i32 = -10;
 let b: i32 = 7;
 
@@ -287,7 +287,7 @@ println!("{}", c.rem_euclid(d)); // 4
 </code></pre>
 <h4>So what's happening here?!</h4>
 <p>Note the different results, 
-<code>a % b</code> is <code>-3</code> because it's simply calculated the remainder. </p>
+<code>a % b</code> is <code>-3</code> because it's simply calculated the remainder.</p>
 <p><code>a.rem_euclid(b)</code> is <code>4</code> because we take the first quotient of b that overshoots <code>-10</code>, and then add a number to walk back to our target, in this case: <code>7 * -2 = -14</code>, <code>-14 + 4 = 10</code>, so our 'remainder' is 4.</p>
 <p>Similarly, the remainder from dividing -20 by 8, is <code>8 * -3 = -24</code> which we walk back to <code>-20</code> by adding <code>4</code>, so our, 'remainder' is 4.</p>
 </div><script>anime({

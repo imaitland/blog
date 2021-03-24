@@ -12,7 +12,7 @@ draft = false
 
 # Understanding `%` and `rem_euclid()` in Rust.
 
-For two positive numbers, `%` and `rem_euclid` methods behave the same way, both will give you the remainder for the division of one number by another. Where they are different is how they treat negative numbers. Or Rather, where some confusion arrises is in deciding what convention to adopt. In some contexts having a negative remainder makes sense, in others it does not. Generally, negative remainders are not really useful.
+For two positive numbers, `%` and `rem_euclid` methods behave the same way, both will give you the remainder for the division of one number by another. Where they are different is how they treat negative numbers. Or rather, where some confusion arises is in deciding what convention to adopt. In some contexts having a negative remainder makes sense, in others it does not. Generally, negative remainders are unconventional.
 
 - In Rust `%` Remainder will always return a remainder matching the sign of the left hand side of the operation:
 ```
@@ -21,7 +21,8 @@ println!("{}", -10 % 7); // expect -3.
 ```
 This means we might have a negative remainder. In cases where this is not desired, how do we find the remainder?
 
-`rem_euclid()` provides an alternative and is generally preffered.
+`rem_euclid()` provides an alternative.
+
 ```
 let a: i32 = -10;
 let b: i32 = 7;
@@ -36,7 +37,7 @@ println!("{}", c.rem_euclid(d)); // 4
 ```
 #### So what's happening here?!
 Note the different results, 
-`a % b` is `-3` because it's simply calculated the remainder. 
+`a % b` is `-3` because it's simply calculated the remainder.
 
 `a.rem_euclid(b)` is `4` because we take the first quotient of b that overshoots `-10`, and then add a number to walk back to our target, in this case: `7 * -2 = -14`, `-14 + 4 = 10`, so our 'remainder' is 4.
 
