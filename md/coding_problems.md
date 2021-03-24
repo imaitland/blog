@@ -16,6 +16,7 @@ This is where I'll be keeping track of problem questions as I answer them. I've 
 
 Also on [leetcode](https://leetcode.com/gl2748/)
 
+
 ## Working with Strings
 ### Question
 > Split a string into a vector of strings.
@@ -55,7 +56,26 @@ match c.to_string().as_str() {
     _ => {}
 }
 ```
+## Accessing `Rc<RefCell<T>>`
 
+Some of Leetcode's binary tree questions are not as idiomatic as they could be. For a traversal of a Binary tree question I found myself wrestling with Leetcode's implementation, their tree nodes have this type: `Option<Rc<RefCell<T>>>`, when `Option<Box<T>>` would likely suffice.
+
+[Unlike `Box<T>` which doesn't require anything special to access its contents](https://doc.rust-lang.org/book/ch15-01-box.html) - it seems hard to unwrap and access T from an `Option<Rc<RefCell<T>>>`.
+
+Googling for an answer I found that I'm not the first to encounter this:
+> [You really don't want to try to remove the value from the Option, the Rc or the RefCell via unwrap / try_unwrap / into_inner. Instead, pattern match on the Option and then call borrow on the RefCell to get a reference to the T.](https://stackoverflow.com/questions/54012660/unwrap-and-access-t-from-an-optionrcrefcellt)
+
+```
+let my_val: Option<Rc<RefCell<T>> = Some(Rc::new(RefCell::new("hello")));
+
+match my_val {
+    Some(v) => {
+        let v = v.borrow();
+        // we now have a reference to "hello" to work with!
+    },
+    None() => {}
+}
+```
 ## Group Anagrams
 ### Question
 > Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.

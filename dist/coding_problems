@@ -305,6 +305,23 @@ let num: i32 = c.parse().unwrap();
     _ =&gt; {}
 }
 </code></pre>
+<h2>Accessing <code>Rc&lt;RefCell&lt;T&gt;&gt;</code></h2>
+<p>Some of Leetcode's binary tree questions are not as idiomatic as they could be. For a traversal of a Binary tree question I found myself wrestling with Leetcode's implementation, their tree nodes have this type: <code>Option&lt;Rc&lt;RefCell&lt;T&gt;&gt;&gt;</code>, when <code>Option&lt;Box&lt;T&gt;&gt;</code> would likely suffice.</p>
+<p><a href="https://doc.rust-lang.org/book/ch15-01-box.html" rel="noopener noreferrer">Unlike <code>Box&lt;T&gt;</code> which doesn't require anything special to access its contents</a> - it seems hard to unwrap and access T from an <code>Option&lt;Rc&lt;RefCell&lt;T&gt;&gt;&gt;</code>.</p>
+<p>Googling for an answer I found that I'm not the first to encounter this:</p>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/54012660/unwrap-and-access-t-from-an-optionrcrefcellt" rel="noopener noreferrer">You really don't want to try to remove the value from the Option, the Rc or the RefCell via unwrap / try_unwrap / into_inner. Instead, pattern match on the Option and then call borrow on the RefCell to get a reference to the T.</a></p>
+</blockquote>
+<pre><code>let my_val: Option&lt;Rc&lt;RefCell&lt;T&gt;&gt; = Some(Rc::new(RefCell::new("hello")));
+
+match my_val {
+    Some(v) =&gt; {
+        let v = v.borrow();
+        // we now have a reference to "hello" to work with!
+    },
+    None() =&gt; {}
+}
+</code></pre>
 <h2>Group Anagrams</h2>
 <h3>Question</h3>
 <blockquote>
