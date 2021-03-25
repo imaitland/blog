@@ -40,6 +40,9 @@ fn main(){
             (GET) ["/assets/paintings/{painting}", painting: String] => {
                 rouille::match_assets(&request, ".")
             },
+            (GET) ["/assets/{asset}", asset: String] => {
+                rouille::match_assets(&request, ".")
+            },
             (GET) ["/"] => {
                 let index_html = build::page_builder::index_page();
                 Response::html(index_html)
