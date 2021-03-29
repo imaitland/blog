@@ -11,7 +11,7 @@ draft = false
 +++
 
 # Ownership in Rust.
-## Introduction
+## Compiler driven development.
 
 It can be seductive to offload the work of keeping a mental model of the flow of ownership in your Rust program to the compiler. I wouldn't want to discourage this approach - it's a good way to develop an intuitive understanding of ownership as well as one way to be productive in Rust quickly.
 
@@ -89,7 +89,7 @@ This understanding neatly plays out in practice, especially when we have nested 
 
 > 🔭 The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. 
 
-## Summary
+## You are the garbage collector 🚮
 
 So we've seen how **values** in the stack or heap are owned by **variables** and remain accessible as long as they are in **scope**.
 
@@ -127,7 +127,7 @@ fn takes_ownership(x: String) -> () {
 by the value owned by x is freed.
 ```
 
-## Conclusion
+## Ownership for you and for fast and safe software.
 Altogether, this model makes how values occupy space in memory explicit at compile-time. This means the work of garbage collecting, or autonomously allocating and deallocating memory, characteristic of other languages is unnecessary in Rust. Altogether making for fast and memory-safe compiled software!
 
 ## Borrowing & References
@@ -135,7 +135,7 @@ Altogether, this model makes how values occupy space in memory explicit at compi
 In life, we are familiar with borrowing and its rules. Say we rent a car we understand this entitles us to use it but not change it. If we were to change the vehicle, say by swapping its engine, we'd be in trouble, because the original owner would not know what they had anymore! Likewise, if the rental company decided to scrap the car during our rental period we'd be a little annoyed, as something we expected to exist no longer does. 
 
 ![](/assets/2020.6.29-Silverado-Swap.jpg)
-> 🛻 When an immutable reference is treated as a mutable one.
+> 🛻 Things get interesting when an immutable reference is treated as a mutable one.
 
 While swapping out a UHaul engine is against the rules of car rentals, we do also have situations where we want to be able to change the thing that we borrow, for example when you take a stained dress to the dry cleaner or a car to a mechanic. In these cases - we grant permission to the borrower, to make changes to the thing that they have borrowed.
 
@@ -238,8 +238,23 @@ fn main() {
   // [ ERROR ] "cannot borrow `q` as mutable because it is also borrowed as immutable"
 }
 ```
- ### Summary
+### Borrowing the family car
 
- We can see that references allow us to bend the strict rules of ownership in disciplined and predictable ways. 
+Using powerful things typically comes with rules, and ownership with its rules for borrowing and references is the framework that helps us write systems-level code in a responsible and safe way. It crops up all the time and is therefore really important to get a firm handle of, something that takes a while. Fortunately the compiler will be there to hold our hand as our understanding and intuition grows.
 
- For example, if we could have more than one mutable reference or a mix of immutable and immutable references we could delete the value in one place, and when we tried to use it elsewhere we'd be in trouble! 
+For the time being, lets recap the rules
+
+#### Rules of ownership. 
+1. Each value has one owner, a variable.
+2. There can only be one variable for each value at a time.
+3. A variable and its value are only valid while they are in scope.
+
+#### Rules of references.
+1. You cannot mutate a value using an immutable reference to it.
+2. There cannot be more than one mutable reference to a value at a time.
+3. A mutable reference to a value cannot exist simultaneously with an immutable reference to that value, either all valid references to a value are immutable or there is one mutable reference at a time.
+
+And it's gotta be returned with a full tank of gas!
+
+
+
