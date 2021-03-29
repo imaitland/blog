@@ -264,13 +264,13 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Ownership in Rust.</h1>
-<h2>Compiler driven development.</h2>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h2>Ownership in Rust.</h2>
+<h3>Compiler driven development.</h3>
 <p>It can be seductive to offload the work of keeping a mental model of the flow of ownership in your Rust program to the compiler. I wouldn't want to discourage this approach - it's a good way to develop an intuitive understanding of ownership as well as one way to be productive in Rust quickly.</p>
 <p>However, you eventually run into a situation where the compiler and its helpful warnings fall short, and you find yourself having to carefully follow the thread ownership has woven through your software. As you find yourself doing this more often, it becomes clear that having a coherent and correct model of ownership in your software as you write it, is unavoidable. </p>
 <p>This isn't such a bad thing... after all, ownership is Rust's flagship feature with many advantages. At the very least understanding how ownership works will help your code remain idiomatic and make compiler errors easier to fix.</p>
 <p>Towards this end, here's where I will be putting my notes for all things related to my understanding of ownership. Heavily influenced by the relevant chapter from the rust book.</p>
-<h2>Ownership for you.</h2>
+<h3>Ownership for you.</h3>
 <p>Ownership consists of 3 things.</p>
 <ol>
 <li>The Scope</li>
@@ -327,7 +327,7 @@ let y = x.clone();
 <blockquote>
 <p>🔭 The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. </p>
 </blockquote>
-<h2>You are the garbage collector 🚮</h2>
+<h3>You are the garbage collector 🚮</h3>
 <p>So we've seen how <strong>values</strong> in the stack or heap are owned by <strong>variables</strong> and remain accessible as long as they are in <strong>scope</strong>.</p>
 <p>Each of these things has an explicit lifecycle that is defined by the boundaries of the scope, they do not persist in memory beyond these bounds and because the compiler enforces this - the work of freeing memory when it is no longer in use is done by us as we write our software! </p>
 <p>You might hear people say that Rust doesn't have a garbage collector, and it is this that they are referring to, simply put it does not need one because memory management is explicitly encoded in the software. It's a bit like we are conscripted as the garbage collector that rust is missing. </p>
@@ -359,9 +359,9 @@ fn takes_ownership(x: String) -&gt; () {
 // When takes_ownership completes drop() is called and memory occupied
 by the value owned by x is freed.
 </code></pre>
-<h2>Ownership for you and for fast and safe software.</h2>
+<h3>Ownership for you and for fast and safe software.</h3>
 <p>Altogether, this model makes how values occupy space in memory explicit at compile-time. This means the work of garbage collecting, or autonomously allocating and deallocating memory, characteristic of other languages is unnecessary in Rust. Altogether making for fast and memory-safe compiled software!</p>
-<h2>Borrowing &amp; References</h2>
+<h3>Borrowing &amp; References</h3>
 <p>In life, we are familiar with borrowing and its rules. Say we rent a car we understand this entitles us to use it but not change it. If we were to change the vehicle, say by swapping its engine, we'd be in trouble, because the original owner would not know what they had anymore! Likewise, if the rental company decided to scrap the car during our rental period we'd be a little annoyed, as something we expected to exist no longer does. </p>
 <p><img src="/assets/2020.6.29-Silverado-Swap.jpg" alt=""></p>
 <blockquote>
@@ -382,14 +382,14 @@ by the value owned by x is freed.
 <li>mutable references</li>
 </ol>
 <p>In the analogous context of real life, you can own a car that you can lend to others, you can rent a car that is immutable, and you can be a mechanic that borrows and mutates/changes cars.</p>
-<h3>Examples</h3>
-<h3>Values</h3>
+<h4>Examples</h4>
+<h4>Values</h4>
 <pre><code>fn main() {
   // The variable x owns the value of type String "hello"
   let x = String::from("hello");
 }
 </code></pre>
-<h3>References</h3>
+<h4>References</h4>
 <pre><code>fn main() {
   let x = String::from("hello");
   does_stuff(&amp;x);
@@ -402,7 +402,7 @@ fn does_stuff(y: &amp;String) {
   println!("y: {}", y);
 }
 </code></pre>
-<h3>Mutable References</h3>
+<h4>Mutable References</h4>
 <pre><code>fn main() {
 
   let x = String::from("hello");
@@ -459,16 +459,16 @@ fn does_stuff(y: &amp;mut String) {
   // [ ERROR ] "cannot borrow `q` as mutable because it is also borrowed as immutable"
 }
 </code></pre>
-<h3>Borrowing the family car</h3>
+<h4>Borrowing the family car</h4>
 <p>Using powerful things typically comes with rules, and ownership with its rules for borrowing and references is the framework that helps us write systems-level code in a responsible and safe way. It crops up all the time and is therefore really important to get a firm handle of, something that takes a while. Fortunately the compiler will be there to hold our hand as our understanding and intuition grows.</p>
 <p>For the time being, lets recap the rules</p>
-<h4>Rules of ownership.</h4>
+<h5>Rules of ownership.</h5>
 <ol>
 <li>Each value has one owner, a variable.</li>
 <li>There can only be one variable for each value at a time.</li>
 <li>A variable and its value are only valid while they are in scope.</li>
 </ol>
-<h4>Rules of references.</h4>
+<h5>Rules of references.</h5>
 <ol>
 <li>You cannot mutate a value using an immutable reference to it.</li>
 <li>There cannot be more than one mutable reference to a value at a time.</li>

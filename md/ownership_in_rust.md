@@ -10,8 +10,8 @@ icon = "🚕"
 draft = false
 +++
 
-# Ownership in Rust.
-## Compiler driven development.
+## Ownership in Rust.
+### Compiler driven development.
 
 It can be seductive to offload the work of keeping a mental model of the flow of ownership in your Rust program to the compiler. I wouldn't want to discourage this approach - it's a good way to develop an intuitive understanding of ownership as well as one way to be productive in Rust quickly.
 
@@ -21,7 +21,7 @@ This isn't such a bad thing... after all, ownership is Rust's flagship feature w
 
 Towards this end, here's where I will be putting my notes for all things related to my understanding of ownership. Heavily influenced by the relevant chapter from the rust book.
 
-## Ownership for you.
+### Ownership for you.
 Ownership consists of 3 things.
 
 1. The Scope
@@ -89,7 +89,7 @@ This understanding neatly plays out in practice, especially when we have nested 
 
 > 🔭 The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. 
 
-## You are the garbage collector 🚮
+### You are the garbage collector 🚮
 
 So we've seen how **values** in the stack or heap are owned by **variables** and remain accessible as long as they are in **scope**.
 
@@ -127,10 +127,10 @@ fn takes_ownership(x: String) -> () {
 by the value owned by x is freed.
 ```
 
-## Ownership for you and for fast and safe software.
+### Ownership for you and for fast and safe software.
 Altogether, this model makes how values occupy space in memory explicit at compile-time. This means the work of garbage collecting, or autonomously allocating and deallocating memory, characteristic of other languages is unnecessary in Rust. Altogether making for fast and memory-safe compiled software!
 
-## Borrowing & References
+### Borrowing & References
 
 In life, we are familiar with borrowing and its rules. Say we rent a car we understand this entitles us to use it but not change it. If we were to change the vehicle, say by swapping its engine, we'd be in trouble, because the original owner would not know what they had anymore! Likewise, if the rental company decided to scrap the car during our rental period we'd be a little annoyed, as something we expected to exist no longer does. 
 
@@ -154,16 +154,16 @@ So the ownership a variable can have of something in memory can be divided into 
 
 In the analogous context of real life, you can own a car that you can lend to others, you can rent a car that is immutable, and you can be a mechanic that borrows and mutates/changes cars.
 
-### Examples
+#### Examples
 
-### Values
+#### Values
 ```
 fn main() {
   // The variable x owns the value of type String "hello"
   let x = String::from("hello");
 }
 ```
-### References 
+#### References 
 ```
 fn main() {
   let x = String::from("hello");
@@ -177,7 +177,7 @@ fn does_stuff(y: &String) {
   println!("y: {}", y);
 }
 ```
-### Mutable References
+#### Mutable References
 ```
 fn main() {
 
@@ -238,18 +238,18 @@ fn main() {
   // [ ERROR ] "cannot borrow `q` as mutable because it is also borrowed as immutable"
 }
 ```
-### Borrowing the family car
+#### Borrowing the family car
 
 Using powerful things typically comes with rules, and ownership with its rules for borrowing and references is the framework that helps us write systems-level code in a responsible and safe way. It crops up all the time and is therefore really important to get a firm handle of, something that takes a while. Fortunately the compiler will be there to hold our hand as our understanding and intuition grows.
 
 For the time being, lets recap the rules
 
-#### Rules of ownership. 
+##### Rules of ownership. 
 1. Each value has one owner, a variable.
 2. There can only be one variable for each value at a time.
 3. A variable and its value are only valid while they are in scope.
 
-#### Rules of references.
+##### Rules of references.
 1. You cannot mutate a value using an immutable reference to it.
 2. There cannot be more than one mutable reference to a value at a time.
 3. A mutable reference to a value cannot exist simultaneously with an immutable reference to that value, either all valid references to a value are immutable or there is one mutable reference at a time.
