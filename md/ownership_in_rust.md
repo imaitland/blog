@@ -13,7 +13,11 @@ draft = false
 # Ownership in Rust.
 ## Introduction
 
-It's reasonable to assume, having a coherent and correct model of ownership in your software as you write it will keep it idiomatic! After all, ownership is Rust's flagship feature!
+It can be seductive to offload the work of keeping a mental model of the flow of ownership in your Rust program to the compiler. I wouldn't want to discourage this approach - it's a good way to develop an intuitive understanding of ownership as well as one way to be productive in Rust quickly.
+
+However, you eventually run into a situation where the compiler and its helpful warnings fall short, and you find yourself having to carefully follow the thread ownership has woven through your software. As you find yourself doing this more often, it becomes clear that having a coherent and correct model of ownership in your software as you write it, is unavoidable. 
+
+This isn't such a bad thing... after all, ownership is Rust's flagship feature with many advantages. At the very least understanding how ownership works will help your code remain idiomatic and make compiler errors easier to fix.
 
 Towards this end, here's where I will be putting my notes for all things related to my understanding of ownership. Heavily influenced by the relevant chapter from the rust book.
 
@@ -24,49 +28,76 @@ Ownership consists of 3 things.
 2. The Variable.
 3. The Value.
 
+So that this function defintion:
 ```
 fn main() {
   let x = "hello"
 }
 ```
-The function body of `main`, bounded by opening and closing `{}` is the **scope**, `x` is the **variable**, and the  `"hello"` is the **value** of type `str`.
+Can be understood like this:
 
-These things are related in the following ways, from the bottom up:
+- The function body of `main`, bounded by opening and closing curly-brackets `{}` is the **scope**
+- `x` is the **variable**
+- `"hello"` is the **value** of type `str`.
 
-The **Value** is stored on the Stack or the heap, depending on its type, values of fixed size, like string slices are stored on the stack, while values of variable size, like Strings are stored on the heap.
+> :dolphin: All three of these things exist in the computer's memory, which itself is divided into two parts the stack and the heap. Discussing these in great depth is beyond the scope of this post, suffice it to say: A **value** can be stored in the stack or the heap depending on its type, while **variables** and **scope** exist on the stack.
 
-The **Variable** and the value are closely intertwined, governed by the following three rules:
+The **variable** and the **value** are closely related, with their relationship governed by the following three rules:
 
 1. Each value has one owner, a variable.
-2. There can only be one owner variable for each value at a time.
+2. There can only be one variable for each value at a time.
 3. A variable and its value are only valid while they are in scope.
 
-> **There's an apparent exception to rule 2**: data on the stack can be cheaply and quickly copied: 
+> :hibiscus: **There's an apparent exception to rule 2**: Data on the stack can be cheaply and quickly copied: 
 > ```
 > let x: str = "hello";
 > let y = x;
 > ```
-> May look like the value "hello" on the stack now has two owners, `x`, and `y`, in fact, the value "hello" a `str` because it exists on the stack can be easily copied, i.e. it implements the `copy()` trait. 
+> May look like the value "hello" on the stack now has two owners, `x`, and `y`.
+>
+> However, when we assigned the value of variable `x` to `y` we cloned the value.
+>
+> This is because the value in question - "hello" is an `str`, and because it exists on the stack can be easily copied, i.e. it implements the `copy()` trait.
+> 
+> Trying to do the same thing with a `String` (which exists on the heap)...
 > ```
 > let x: String = String::from("hello");
 > let y = x;
 > ```
-> Will not compile due to rule 2. Finally, for completeness - If we did want to copy a value on the heap, and give ownership of the copied data to another variable we can use the `copy` method.
+> Does not compile due to rule 2.
+> 
+> Finally, for completeness - If we did want to copy a value on the heap, and give ownership of the copied data to another variable we can use the `clone` method.
 > ```
 > let x: String = String::from("hello);
 > let y = x.clone();
+> ```
 > 
+>
 
-To summarize thus far - a variable is the owner of a value, and therefore 'owner'  of the space allocated to the value in memory (either the stack or the heap). 
+To summarize thus far - a **variable** is the **owner** of a value, and therefore 'owner'  of the space allocated to the value in memory (either on the stack or in the heap). 
 
-Looking ahead -  the variable is also related to the scope... a variable is only valid while it is in scope, and therefore the space it 'owns' in memory is freed / de-allocated when it moves out of scope.
+The **variable** is also related to the **scope** - remember rule 3.
+> "A **variable** and its **value** is only valid while it is in scope"
 
-The **Scope** is the context in which a given variable is valid, typically the code
-bounded by a function body. The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. 
+By implication the space a **variable** 'owns' in memory is freed / de-allocated when its scope ends.
 
-It's worth noting that at this point - the point at which the current scope ends - the scope immediately under it in the stack becomes the valid scope - for example the function body that called the now finished function.
+Which begs the question, when does the **scope** begin and end?
 
-The following summarizes the topics covered so far:
+The **scope** is the context in which a given variable is valid, typically the code bounded by a function body. So it can be said that the scope begins with the opening curly-bracket `{` and ends with the closing `}` curly bracket.
+
+This understanding neatly plays out in practice, especially when we have nested functions... it is clear that there is only one valid scope at a time.
+
+> :cow: The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. 
+
+## Summary
+
+So we've seen how **values** in the stack or heap are owned by **variables** and remain accessible as long as they are in **scope**.
+
+Each of these things has an explicit lifecycle that is defined by the boundaries of the scope, they do not persist in memory beyond these bounds and because the compiler enforces this - the work of freeing memory when it is no longer in use is done by us as we write our software! 
+
+You might hear people say that Rust doesn't have a garbage collector, and it is this that they are referring to, simply put it does not need one because memory management is explicitly encoded in the software. It's a bit like we are conscripted as the garbage collector that rust is missing. 
+
+Whether or not you agree with that - the following summarizes the topics covered so far:
 ```
 fn main () {
   let s = String::from("hello");
@@ -80,7 +111,7 @@ fn main () {
   let p = "hello";
   // p comes into scope.
   
-  // p is copied, therefore remains valid.
+  // p is copied, remember it is a str! and therefore remains valid.
   let result_2 = fictional_function(p);
   
   // using p here would still work!
@@ -88,27 +119,42 @@ fn main () {
 } 
 
 fn takes_ownership(x: String) -> () {
-  // Value previously owned by s is now owned by x within this scope.
+  // Value previously owned by s is now owned by x
+  // within this scope.
   println!("{}", x);
 }
 // When takes_ownership completes drop() is called and memory occupied
 by the value owned by x is freed.
 ```
-  
-Altogether, this model makes how values occupy space in memory explicit at compile time, meaning the work of garbage collecting, or autonomously allocating and de allocating memory is unnecessary. Altogether making for fast and memory safe compiled software!
+
+## Conclusion
+Altogether, this model makes how values occupy space in memory explicit at compile-time. This means the work of garbage collecting, or autonomously allocating and deallocating memory, characteristic of other languages is unnecessary in Rust. Altogether making for fast and memory-safe compiled software!
 
 ## Borrowing & References
 
-Now - remember we said that there can be one owner of a value at a time, well just like in life, within software we encounter situations where it is convenient to lend and borrow owned entities.
+In life, we are familiar with borrowing and its rules. Say we rent a car we understand this entitles us to use it but not change it. If we were to change the vehicle, say by swapping its engine, we'd be in trouble, because the original owner would not know what they had anymore! Likewise, if the rental company decided to scrap the car during our rental period we'd be a little annoyed, as something we expected to exist no longer does. 
 
-For example one scope might like to pass a value down into another scope, without giving up ownership in the current scope. At this point we can introduce variations on ownership.  We know that a **variable** owns a **value**, but a variable can also (1) be attached to a reference to a value, i.e. a variable can *refer* to a value without owning it. Furthermore, with this reference, a, provided it is *mutable* a (3) variable can have a mutable reference to a value, and with this powerful form of borrowing - can change the value to which it refers!
+![](/assets/2020.6.29-Silverado-Swap.jpg)
+> :truck: When an immutable reference is treated as a mutable one.
 
-So ownership can be divided into three types:
+While swapping out a UHaul engine is against the rules of car rentals, we do also have situations where we want to be able to change the thing that we borrow, for example when you take a stained dress to the dry cleaner or a car to a mechanic. In these cases - we grant permission to the borrower, to make changes to the thing that they have borrowed.
+
+Well just like in life, within software we encounter situations where it is convenient to lend and borrow owned entities, with rules governing whether or not the borrowed thing can be changed or not.
+
+In the context of Rust, we frequently encounter these situations. For example, one scope might like to pass a value down into the scope of another function, without giving up ownership in the current scope, and without having to `clone()` the value. At this point, we can introduce variations on ownership.
+ - A **variable** can own a **value**. (We're familiar with this)
+ - A **variable** can also own a reference to a value, i.e. a variable can *refer* to a value without owning it.
+ - If this *reference* is mutable then the value to which it refers can be changed.
+
+So the ownership a variable can have of something in memory can be divided into three types:
+
 1. values
 2. references
 3. mutable references
 
-Which can be demonstrated like this:
+In the analogous context of real life, you can own a car that you can lend to others, you can rent a car that is immutable, and you can be a mechanic that borrows and mutates/changes cars.
+
+### Examples
 
 ### Values
 ```
@@ -122,7 +168,7 @@ fn main() {
 fn main() {
   let x = String::from("hello");
   does_stuff(&x);
-  // Because we passed a reference to does_stuff, it remains in scope, unchanged.
+  // Because we passed an immutable reference to does_stuff, it remains in scope, unchanged.
   println!("x: {}", x);
   
 }
@@ -161,34 +207,39 @@ The existence of mutable references is governed by three rules.
 
 1. You cannot mutate an immutable reference.
 2. There cannot be more than one mutable reference at a time.
-3. A mutable reference to a value cannot exist simultaneously with an immutable reference to that value, either all valid references to a value are immutable or immutable.
+3. A mutable reference to a value cannot exist simultaneously with an immutable reference to that value, either all valid references to a value are immutable or there is one mutable reference.
 
 These three rules are demonstrated by these three compilation errors...
 
 ```
 fn main() {
   // You cannot mutate an immutable reference.
-  // [ ERROR ] "cannot assign twice to immutable variable `y`"
   let x = String::from("hello");
   let y = &x;
   y = &String::from("world");
   
   println!("{}, {}", x, y);
+  // [ ERROR ] "cannot assign twice to immutable variable `y`"
 
   // There cannot be more than one mutable reference for the same value in scope.
-  // [ ERROR ] "cannot borrow `q` as mutable more than once at a time"
   let mut q = String::from("foo");
   let p = &mut q; 
   let f = &mut q;
 
   println!("{}, {}", p, f);
+  // [ ERROR ] "cannot borrow `q` as mutable more than once at a time"
 
   // You cannot have both a reference and a mutable reference
-  // [ ERROR ] "cannot borrow `q` as mutable because it is also borrowed as immutable"
   let a = String::from("foo");
   let b = &q; 
   let c = &mut q;
 
   println!("{}, {}", a, b);
+  // [ ERROR ] "cannot borrow `q` as mutable because it is also borrowed as immutable"
 }
 ```
+ ### Summary
+
+ We can see that references allow us to bend the strict rules of ownership in disciplined and predictable ways. 
+
+ For example, if we could have more than one mutable reference or a mix of immutable and immutable references we could delete the value in one place, and when we tried to use it elsewhere we'd be in trouble! 

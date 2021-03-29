@@ -10,6 +10,9 @@ icon = "👁👁️"
 draft = false
 +++
 ![](/assets/IMG_5204.JPG)
+![](/assets/IMG_5206.JPG)
+![](/assets/IMG_5208.JPG)
+
 # About
 My name is iain maitland. I'm a software developer in the USA. I've worked at a few startups big and small over the last 6 years or so as a frontend and then fullstack developer. If you want to keep it formal, my [resume is here](iain_maitland_resume.pdf).
 
