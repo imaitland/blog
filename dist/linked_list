@@ -266,7 +266,7 @@ code {
     opacity: 1;
 }</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Linked List</h1>
 <p>This post relies heavily on this excellent post, <a href="https://rust-unofficial.github.io/too-many-lists/" rel="noopener noreferrer">Learn Rust with Entirely Too Many Linked Lists.</a></p>
-<h2>first pass.</h2>
+<h2>First pass.</h2>
 <p>This linked list with <code>new</code> and <code>push</code> implementations demonstrates and important concept regarding Ownership.</p>
 <pre><code>#![allow(unused)]
 fn main() {
@@ -307,60 +307,66 @@ fn main() {
    |                       move occurs because `self.head` has type `Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;`, which does not implement the `Copy` trait
    |                       help: consider borrowing the `Option`'s content: `self.head.as_ref()`
 </code></pre>
-<p>Understanding the problem:</p>
-<ol>
-<li>
-<p>The variable <code>self</code> enters the push method as a mutable reference to the List.</p>
-</li>
-<li>
-<p>The mutable reference to a value   has its ownership moved to from the variable <code>self.head</code> to the variable <code>new_node.next</code>:</p>
-</li>
-</ol>
+<h3>Understanding the problem.</h3>
 <ul>
-<li>At this point, <code>self.head</code> is a variable without a value...
-<ul>
-<li>Another way of putting this would be to say that the value has two owners, <code>self.head</code> and <code>new_node.next</code>.</li>
-</ul>
+<li>
+<p>The variable <code>self</code> is a mutable reference to the <code>List</code> struct that <code>push</code> was called on.</p>
 </li>
-<li>We know that we'll later give <code>self.head</code> a valid value - <code>Some(new_node)</code></li>
-<li><strong>BUT</strong> the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing <code>self.head</code> and it pointing to a location in memory that it does not own, or that does not exist! We're violating the rule that a value can only have one owner.</li>
+<li>
+<p>The mutable reference to a value has its ownership <strong>moved</strong> from the variable <code>self.head</code> to the variable <code>new_node.next</code>, with this line:</p>
+</li>
 </ul>
-<ol start="3">
-<li>Therefore we need a way of passing ownership to <code>new_node.next</code> while stuffing a pacifier in <code>self.head</code>'s mouth to stop it crying out, at least until we can give it a useful value...</li>
-</ol>
-<p>The Solution.</p>
-<p>Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives <code>new_node.next</code> ownership of a <em>reference</em>, but in this case, the <code>next</code> field of the Node struct cannot be a reference.</p>
+<pre><code>next: self.head
+</code></pre>
+<ul>
+<li>
+<p>At this point the <code>head</code> field on our <code>List</code> struct does not have a value, because it has just been moved to the <code>next</code> field of a <code>Node</code> struct.</p>
+</li>
+<li>
+<p>i.e <code>self.head</code> is a variable without a value...</p>
+</li>
+<li>
+<p>We know that we'll later give <code>self.head</code> a valid value - <code>Some(new_node)</code> and all will be right with the world.</p>
+</li>
+<li>
+<p><strong>BUT</strong> the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing <code>self.head</code> and it pointing to a location in memory that it does not own, or that does not exist! We're violating the core ownership rule that a value can only have one owner.</p>
+</li>
+</ul>
+<p>Therefore we need a way of passing ownership to <code>new_node.next</code> while stuffing a pacifier in <code>self.head</code>'s mouth to stop it crying out, at least until we can give it a useful value...</p>
+<h3>The Solution.</h3>
+<p>Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives <code>new_node.next</code> ownership of a <em>reference</em>, but in this case, the <code>next</code> field of the <code>Node</code> struct cannot be a reference.</p>
 <p>Our solution is: <a href="https://doc.rust-lang.org/std/mem/fn.take.html" rel="noopener noreferrer"><code>take</code></a> in the docs it states:</p>
 <blockquote>
 <p>... allows taking ownership of a struct field by replacing it with an "empty" value. Without take you can run into issues...</p>
 </blockquote>
-<p>In our language, we use "empty" as a pacifier for the <code>self.head</code> variable, until we can assign it an useful value.</p>
-<p>Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop and find method!</p>
+<p>What <code>take</code> does (as its name suggests) is to <code>take</code> the value from a struct field, and in the same moment, give that same field an empty value  as a pacifier until it can give it a meaningful value, typically one that uses the <code>taken</code> value somewhere.</p>
+<p>Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop method!</p>
 <pre><code>struct List&lt;T&gt; {
     head: Link&lt;T&gt;
 }
 
-type Link&lt;T&gt; = Option&lt;&lt;Box&lt;T&gt;&gt;&gt;
+type Link&lt;T&gt; = Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;;
 
-struct Node&lt;T&gt; = {
+struct Node&lt;T&gt; {
     elem: T,
     next: Link&lt;T&gt;
 }
 
-impl&lt;T&gt; List&lt;T&gt; {
-    new() -&gt; Self {
+impl&lt;T: std::cmp::PartialEq&gt; List&lt;T&gt; {
+    fn new() -&gt; Self {
         List {
             head: None
         }
     }
-    push(&amp;mut self, e: T) {
-        let new_node = Node {
+    fn push(&amp;mut self, e: T) {
+        let new_node = Box::new(Node {
             elem: e,
             next: self.head.take()
-        }
-       self.head = new_node
+        });
+        self.head = Some(new_node);
     }
-    pop(&amp;mut self) -&gt; Option&lt;T&gt; {
+
+    fn pop(&amp;mut self) -&gt; Option&lt;T&gt; {
         match self.head.take() { // after calling self.head.take(), self.head gets the 'empty' pacifier.
             None =&gt; None,
             Some(n) =&gt; {
@@ -368,17 +374,6 @@ impl&lt;T&gt; List&lt;T&gt; {
                 Some(n.elem)
             }
         }
-    }
-    find(&amp;self, needle: T, curr: Node&lt;T&gt;) -&gt; Option&lt;Node&lt;T&gt;&gt; {
-        match self.head {
-            None =&gt; None,
-            Some(n) =&gt; {
-                if (n.elem) == needle {
-                    return n
-                }
-            }
-        }
-
     }
 }
 </code></pre>

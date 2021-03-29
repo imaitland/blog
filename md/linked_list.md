@@ -14,7 +14,7 @@ draft = false
 
 This post relies heavily on this excellent post, [Learn Rust with Entirely Too Many Linked Lists.](https://rust-unofficial.github.io/too-many-lists/)
 
-## first pass.
+## First pass.
 
 This linked list with `new` and `push` implementations demonstrates and important concept regarding Ownership.
 
@@ -61,54 +61,62 @@ In the above implementation, there's the following compilation error:
    |                       help: consider borrowing the `Option`'s content: `self.head.as_ref()`
 ```
 
-Understanding the problem:
+### Understanding the problem.
 
-1. The variable `self` enters the push method as a mutable reference to the List.
+- The variable `self` is a mutable reference to the `List` struct that `push` was called on.
 
-2. The mutable reference to a value   has its ownership moved to from the variable `self.head` to the variable `new_node.next`:
-  - At this point, `self.head` is a variable without a value...
-    - Another way of putting this would be to say that the value has two owners, `self.head` and `new_node.next`.
-  - We know that we'll later give `self.head` a valid value - `Some(new_node)`
-  - **BUT** the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing `self.head` and it pointing to a location in memory that it does not own, or that does not exist! We're violating the rule that a value can only have one owner.
-3. Therefore we need a way of passing ownership to `new_node.next` while stuffing a pacifier in `self.head`'s mouth to stop it crying out, at least until we can give it a useful value...
+- The mutable reference to a value has its ownership **moved** from the variable `self.head` to the variable `new_node.next`, with this line:
+```
+next: self.head
+```
+  - At this point the `head` field on our `List` struct does not have a value, because it has just been moved to the `next` field of a `Node` struct.
+  
+  - i.e `self.head` is a variable without a value...
 
-The Solution.
+  - We know that we'll later give `self.head` a valid value - `Some(new_node)` and all will be right with the world.
 
-Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives `new_node.next` ownership of a *reference*, but in this case, the `next` field of the Node struct cannot be a reference.
+  - **BUT** the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing `self.head` and it pointing to a location in memory that it does not own, or that does not exist! We're violating the core ownership rule that a value can only have one owner.
+
+Therefore we need a way of passing ownership to `new_node.next` while stuffing a pacifier in `self.head`'s mouth to stop it crying out, at least until we can give it a useful value...
+
+### The Solution.
+
+Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives `new_node.next` ownership of a *reference*, but in this case, the `next` field of the `Node` struct cannot be a reference.
 
 Our solution is: [`take`](https://doc.rust-lang.org/std/mem/fn.take.html) in the docs it states:
 > ... allows taking ownership of a struct field by replacing it with an "empty" value. Without take you can run into issues...
 
-In our language, we use "empty" as a pacifier for the `self.head` variable, until we can assign it an useful value.
+What `take` does (as its name suggests) is to `take` the value from a struct field, and in the same moment, give that same field an empty value  as a pacifier until it can give it a meaningful value, typically one that uses the `taken` value somewhere.
 
-Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop and find method!
+Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop method!
 
 ```
 struct List<T> {
     head: Link<T>
 }
 
-type Link<T> = Option<<Box<T>>>
+type Link<T> = Option<Box<Node<T>>>;
 
-struct Node<T> = {
+struct Node<T> {
     elem: T,
     next: Link<T>
 }
 
-impl<T> List<T> {
-    new() -> Self {
+impl<T: std::cmp::PartialEq> List<T> {
+    fn new() -> Self {
         List {
             head: None
         }
     }
-    push(&mut self, e: T) {
-        let new_node = Node {
+    fn push(&mut self, e: T) {
+        let new_node = Box::new(Node {
             elem: e,
             next: self.head.take()
-        }
-       self.head = new_node
+        });
+        self.head = Some(new_node);
     }
-    pop(&mut self) -> Option<T> {
+
+    fn pop(&mut self) -> Option<T> {
         match self.head.take() { // after calling self.head.take(), self.head gets the 'empty' pacifier.
             None => None,
             Some(n) => {
@@ -117,15 +125,5 @@ impl<T> List<T> {
             }
         }
     }
-    find(&self, needle: T, curr: Node<T>) -> Option<Node<T>> {
-        match self.head {
-            None => None,
-            Some(n) => {
-                if (n.elem) == needle {
-                    return n
-                }
-            }
-        }
-
-    }
 }
+```

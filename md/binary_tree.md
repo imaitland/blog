@@ -13,7 +13,14 @@ draft = false
 # Binary Tree.
 ### Creating a Binary Tree
 
-As I am still new to rust I often start by writing out the code without thinking about ownership, and then using the compiler to drive further development.Surprisingly, the following is very close to my first pass at implementing a Binary Tree. This was in a large part possible after having read this [gist](https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370).
+This [gist](https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370) offers a useful starting point when attempting to write a Binary Tree data structure from scratch in Rust.
+
+But doesn't go far to explain why you might want to do this... [Rust provides a far more complete and likely performant `BTreeMap` and `BTreeSet` as part of the `std` library, along with a bunch of useful context for when to use it](https://doc.rust-lang.org/std/collections/index.html). 
+
+The obvious answer is why not, Binary Trees are a fundamental data structure and getting to grips with their internals is a useful learning exercise.
+Implementing a binary tree from scratch is useful if you want to implement novel traversals, detect cycles or implement custom methods on the struct. As a recursive data structure, it is also a pretty good introduction to Rust's smart pointers.
+
+### First pass
 
 ```
 #[derive(Debug)]
@@ -84,9 +91,11 @@ fn main() {
 
 Here we simply insert a `TreeNode` on the left hand branch of our Binary Tree. This is a bit limited, so let's consider how it can be improved.
 1. If the Tree already has the value, do not insert it.
-2.  Only insert if the `TreeNode` has an unoccupied branch - i.e. `None` as the left or right branch.
-3. If both branches have nodes, move down to one of the branches, continue until an unoccupied branch is found.
-3i. When deciding which branch to move into, go left if the Node's value is more than the value to be inserted, and go right if not.
+2.  Only insert if the `TreeNode` has an unoccupied branch - i.e. `None` as the branch we want to move into.
+3. If the desired branch has a node, move down into it, continue until an unoccupied desired branch is found.
+
+      - When deciding which branch is desired, go left if the Node's value is more than the value to be inserted, and go right if not.
+      - Bonus: This will result in a Binary Search Tree!
 
 ```
 pub fn insert(&mut self, v: T) {
@@ -131,10 +140,17 @@ error: could not compile `playground`
 To learn more, run the command again with --verbose.
 ```
 
-This is not compiling because of mismatched types, `target_node` expects a mutable reference to some data in memory, and instead it's getting a chunk of data in memory. We could make `Some(new_node)` a reference, but that's not what our `TreeNode` expects the value of it's `left` or `right` branches to be.
+Now this leaves us in a bit of a confusing situation, if we have a mutable reference, why can't we mutate it directly?
 
+Here it's crucial to understand that `target_node` is a pointer to an address in memory, not the value that is located there. If we were to mutate it directly, we'd be mutating a pointer, not the data it points to.
 
-Usefully the compiler provides some help:
+Instead we want to mutate the data it is pointing to, and to do that we have to 'follow it', which is what we do by dereferencing, having dereferenced our pointer, we are now acting on the actual data...
+
+> A reference is an address pointer. If you were to just do 
+`m += 10`
+you'd be changing the memory address (Rust doesn't let you do this without unsafe). What you want to do is change the value at `m`. So where's the value? Follow the pointer! You do this by dereferencing.
+
+Usefully the compiler suggests the following:
 ```
 > help: consider dereferencing here to assign to the mutable borrowed piece of memory
    |
@@ -142,9 +158,8 @@ Usefully the compiler provides some help:
    |                 ^^^^^^^^^^^^
 ```
 
-What it is suggesting, correctly is that we should assign to the "mutable borrowed piece of memory" that the variable `target_node` points to. To do this we dereference the `target_node` variable, which could either be, `&mut self.left` or `&mut self.right`, and in doing so, convert it into a mutable piece of memory, rather than a mere reference.
 
-A more long winded way of doing this would be:
+Now, to make it clear what our intentions are a  more long winded way of doing this would be:
 ```
 match target_node {
     None => {
@@ -160,7 +175,7 @@ match target_node {
 }
 ```
 
-But let's use the compiler's suggestion:
+While using the compiler's suggestion to dereference our mutable reference to mutate the data it refers to, we can do the same thing like this:
 
 ```
 let target_node = if v < self.val {&mut self.left} else {&mut self.right};
@@ -176,6 +191,18 @@ match target_node {
 }
 ```
 
+It is worth noting that it is common to want to change the value that a mutable reference refers to, and to use the `dereferencing operator` to do this.
+
+For example:
+
+```
+let mut v = vec![100, 32, 57];
+for i in &mut v {
+    *i += 50;
+}
+```
+Adds `50` to each element in `v`, in place. 
+
 ## Binary Tree Traversal
 ```
 pub fn traverse(&self) {
@@ -188,9 +215,9 @@ pub fn traverse(&self) {
     }
 }
 ```
-This traversal prints the node value followed by the left and right nodes. This is known as pre-order traversal.
+This traversal prints the node value followed by the left and right nodes. This is known as `pre-order` traversal.
 
-There are two other types of traversal are in-order traversal and post-order traversal.
+There are two other types of traversal: `in-order` traversal and `post-order` traversal.
 
 - *Preorder Traversal* - `Current Node, Left Node, Right`
 - *Inorder Traversal* - `Left, Current, Right`
@@ -261,6 +288,12 @@ fn main() {
     let mut my_tree = TreeNode::new(32);
     println!("Initial Tree: {:?}", my_tree);
     my_tree.insert(15);
+    my_tree.insert(16);
+    my_tree.insert(17);
+    my_tree.insert(14);
+    my_tree.insert(9);
+    my_tree.insert(13);
+    my_tree.insert(18);
     println!("After Insert: {:?}", my_tree);
     my_tree.traverse(Order::Pre);
     my_tree.traverse(Order::In);
@@ -268,4 +301,4 @@ fn main() {
 }
 ```
 
-Which altogether isn't too bad! In a follow up I will look at the time and space complexity of different operations on our Tree as well as exploring enhancing it, for example creating a balanced binary tree.
+Which altogether isn't too bad! In a follow up I will look at the time and space complexity of different operations on our Tree as well as exploring enhancing it, in particular by referring to the [`std::collections::BTreeMap` implementation in the core library.](https://doc.rust-lang.org/src/alloc/collections/btree/map.rs.html#133-136)

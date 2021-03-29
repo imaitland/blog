@@ -266,7 +266,11 @@ code {
     opacity: 1;
 }</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Binary Tree.</h1>
 <h3>Creating a Binary Tree</h3>
-<p>As I am still new to rust I often start by writing out the code without thinking about ownership, and then using the compiler to drive further development.Surprisingly, the following is very close to my first pass at implementing a Binary Tree. This was in a large part possible after having read this <a href="https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370" rel="noopener noreferrer">gist</a>.</p>
+<p>This <a href="https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370" rel="noopener noreferrer">gist</a> offers a useful starting point when attempting to write a Binary Tree data structure from scratch in Rust.</p>
+<p>But doesn't go far to explain why you might want to do this... <a href="https://doc.rust-lang.org/std/collections/index.html" rel="noopener noreferrer">Rust provides a far more complete and likely performant <code>BTreeMap</code> and <code>BTreeSet</code> as part of the <code>std</code> library, along with a bunch of useful context for when to use it</a>. </p>
+<p>The obvious answer is why not, Binary Trees are a fundamental data structure and getting to grips with their internals is a useful learning exercise.
+Implementing a binary tree from scratch is useful if you want to implement novel traversals, detect cycles or implement custom methods on the struct. As a recursive data structure, it is also a pretty good introduction to Rust's smart pointers.</p>
+<h3>First pass</h3>
 <pre><code>#[derive(Debug)]
 struct TreeNode&lt;T&gt; {
     val: T,
@@ -329,10 +333,19 @@ fn main() {
 </code></pre>
 <p>Here we simply insert a <code>TreeNode</code> on the left hand branch of our Binary Tree. This is a bit limited, so let's consider how it can be improved.</p>
 <ol>
-<li>If the Tree already has the value, do not insert it.</li>
-<li>Only insert if the <code>TreeNode</code> has an unoccupied branch - i.e. <code>None</code> as the left or right branch.</li>
-<li>If both branches have nodes, move down to one of the branches, continue until an unoccupied branch is found.
-3i. When deciding which branch to move into, go left if the Node's value is more than the value to be inserted, and go right if not.</li>
+<li>
+<p>If the Tree already has the value, do not insert it.</p>
+</li>
+<li>
+<p>Only insert if the <code>TreeNode</code> has an unoccupied branch - i.e. <code>None</code> as the branch we want to move into.</p>
+</li>
+<li>
+<p>If the desired branch has a node, move down into it, continue until an unoccupied desired branch is found.</p>
+<ul>
+<li>When deciding which branch is desired, go left if the Node's value is more than the value to be inserted, and go right if not.</li>
+<li>Bonus: This will result in a Binary Search Tree!</li>
+</ul>
+</li>
 </ol>
 <pre><code>pub fn insert(&amp;mut self, v: T) {
     if self.val == v {
@@ -376,15 +389,21 @@ error: could not compile `playground`
 
 To learn more, run the command again with --verbose.
 </code></pre>
-<p>This is not compiling because of mismatched types, <code>target_node</code> expects a mutable reference to some data in memory, and instead it's getting a chunk of data in memory. We could make <code>Some(new_node)</code> a reference, but that's not what our <code>TreeNode</code> expects the value of it's <code>left</code> or <code>right</code> branches to be.</p>
-<p>Usefully the compiler provides some help:</p>
+<p>Now this leaves us in a bit of a confusing situation, if we have a mutable reference, why can't we mutate it directly?</p>
+<p>Here it's crucial to understand that <code>target_node</code> is a pointer to an address in memory, not the value that is located there. If we were to mutate it directly, we'd be mutating a pointer, not the data it points to.</p>
+<p>Instead we want to mutate the data it is pointing to, and to do that we have to 'follow it', which is what we do by dereferencing, having dereferenced our pointer, we are now acting on the actual data...</p>
+<blockquote>
+<p>A reference is an address pointer. If you were to just do 
+<code>m += 10</code>
+you'd be changing the memory address (Rust doesn't let you do this without unsafe). What you want to do is change the value at <code>m</code>. So where's the value? Follow the pointer! You do this by dereferencing.</p>
+</blockquote>
+<p>Usefully the compiler suggests the following:</p>
 <pre><code>&gt; help: consider dereferencing here to assign to the mutable borrowed piece of memory
    |
 27 |                 *target_node = Some(new_node);
    |                 ^^^^^^^^^^^^
 </code></pre>
-<p>What it is suggesting, correctly is that we should assign to the "mutable borrowed piece of memory" that the variable <code>target_node</code> points to. To do this we dereference the <code>target_node</code> variable, which could either be, <code>&amp;mut self.left</code> or <code>&amp;mut self.right</code>, and in doing so, convert it into a mutable piece of memory, rather than a mere reference.</p>
-<p>A more long winded way of doing this would be:</p>
+<p>Now, to make it clear what our intentions are a  more long winded way of doing this would be:</p>
 <pre><code>match target_node {
     None =&gt; {
         if v &lt; self.val {
@@ -398,7 +417,7 @@ To learn more, run the command again with --verbose.
     }
 }
 </code></pre>
-<p>But let's use the compiler's suggestion:</p>
+<p>While using the compiler's suggestion to dereference our mutable reference to mutate the data it refers to, we can do the same thing like this:</p>
 <pre><code>let target_node = if v &lt; self.val {&amp;mut self.left} else {&amp;mut self.right};
 
 match target_node {
@@ -411,6 +430,14 @@ match target_node {
     }
 }
 </code></pre>
+<p>It is worth noting that it is common to want to change the value that a mutable reference refers to, and to use the <code>dereferencing operator</code> to do this.</p>
+<p>For example:</p>
+<pre><code>let mut v = vec![100, 32, 57];
+for i in &amp;mut v {
+    *i += 50;
+}
+</code></pre>
+<p>Adds <code>50</code> to each element in <code>v</code>, in place. </p>
 <h2>Binary Tree Traversal</h2>
 <pre><code>pub fn traverse(&amp;self) {
     println!("{:?}", self.val);
@@ -422,8 +449,8 @@ match target_node {
     }
 }
 </code></pre>
-<p>This traversal prints the node value followed by the left and right nodes. This is known as pre-order traversal.</p>
-<p>There are two other types of traversal are in-order traversal and post-order traversal.</p>
+<p>This traversal prints the node value followed by the left and right nodes. This is known as <code>pre-order</code> traversal.</p>
+<p>There are two other types of traversal: <code>in-order</code> traversal and <code>post-order</code> traversal.</p>
 <ul>
 <li><em>Preorder Traversal</em> - <code>Current Node, Left Node, Right</code></li>
 <li><em>Inorder Traversal</em> - <code>Left, Current, Right</code></li>
@@ -492,13 +519,19 @@ fn main() {
     let mut my_tree = TreeNode::new(32);
     println!("Initial Tree: {:?}", my_tree);
     my_tree.insert(15);
+    my_tree.insert(16);
+    my_tree.insert(17);
+    my_tree.insert(14);
+    my_tree.insert(9);
+    my_tree.insert(13);
+    my_tree.insert(18);
     println!("After Insert: {:?}", my_tree);
     my_tree.traverse(Order::Pre);
     my_tree.traverse(Order::In);
     my_tree.traverse(Order::Post);
 }
 </code></pre>
-<p>Which altogether isn't too bad! In a follow up I will look at the time and space complexity of different operations on our Tree as well as exploring enhancing it, for example creating a balanced binary tree.</p>
+<p>Which altogether isn't too bad! In a follow up I will look at the time and space complexity of different operations on our Tree as well as exploring enhancing it, in particular by referring to the <a href="https://doc.rust-lang.org/src/alloc/collections/btree/map.rs.html#133-136" rel="noopener noreferrer"><code>std::collections::BTreeMap</code> implementation in the core library.</a></p>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {
