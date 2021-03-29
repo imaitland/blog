@@ -289,7 +289,7 @@ code {
 <li><code>"hello"</code> is the <strong>value</strong> of type <code>str</code>.</li>
 </ul>
 <blockquote>
-<p>:dolphin: All three of these things exist in the computer's memory, which itself is divided into two parts the stack and the heap. Discussing these in great depth is beyond the scope of this post, suffice it to say: A <strong>value</strong> can be stored in the stack or the heap depending on its type, while <strong>variables</strong> and <strong>scope</strong> exist on the stack.</p>
+<p>🐬 All three of these things exist in the computer's memory, which itself is divided into two parts the stack and the heap. Discussing these in great depth is beyond the scope of this post, suffice it to say: A <strong>value</strong> can be stored in the stack or the heap depending on its type, while <strong>variables</strong> and <strong>scope</strong> exist on the stack.</p>
 </blockquote>
 <p>The <strong>variable</strong> and the <strong>value</strong> are closely related, with their relationship governed by the following three rules:</p>
 <ol>
@@ -298,7 +298,7 @@ code {
 <li>A variable and its value are only valid while they are in scope.</li>
 </ol>
 <blockquote>
-<p>:hibiscus: <strong>There's an apparent exception to rule 2</strong>: Data on the stack can be cheaply and quickly copied: </p>
+<p>➿ <strong>There's an apparent exception to rule 2</strong>: Data on the stack can be cheaply and quickly copied: </p>
 <pre><code>let x: str = "hello";
 let y = x;
 </code></pre>
@@ -325,7 +325,7 @@ let y = x.clone();
 <p>The <strong>scope</strong> is the context in which a given variable is valid, typically the code bounded by a function body. So it can be said that the scope begins with the opening curly-bracket <code>{</code> and ends with the closing <code>}</code> curly bracket.</p>
 <p>This understanding neatly plays out in practice, especially when we have nested functions... it is clear that there is only one valid scope at a time.</p>
 <blockquote>
-<p>:cow: The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. </p>
+<p>🔭 The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. </p>
 </blockquote>
 <h2>Summary</h2>
 <p>So we've seen how <strong>values</strong> in the stack or heap are owned by <strong>variables</strong> and remain accessible as long as they are in <strong>scope</strong>.</p>
@@ -365,7 +365,7 @@ by the value owned by x is freed.
 <p>In life, we are familiar with borrowing and its rules. Say we rent a car we understand this entitles us to use it but not change it. If we were to change the vehicle, say by swapping its engine, we'd be in trouble, because the original owner would not know what they had anymore! Likewise, if the rental company decided to scrap the car during our rental period we'd be a little annoyed, as something we expected to exist no longer does. </p>
 <p><img src="/assets/2020.6.29-Silverado-Swap.jpg" alt=""></p>
 <blockquote>
-<p>:truck: When an immutable reference is treated as a mutable one.</p>
+<p>🛻 When an immutable reference is treated as a mutable one.</p>
 </blockquote>
 <p>While swapping out a UHaul engine is against the rules of car rentals, we do also have situations where we want to be able to change the thing that we borrow, for example when you take a stained dress to the dry cleaner or a car to a mechanic. In these cases - we grant permission to the borrower, to make changes to the thing that they have borrowed.</p>
 <p>Well just like in life, within software we encounter situations where it is convenient to lend and borrow owned entities, with rules governing whether or not the borrowed thing can be changed or not.</p>

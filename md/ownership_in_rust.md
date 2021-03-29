@@ -40,7 +40,7 @@ Can be understood like this:
 - `x` is the **variable**
 - `"hello"` is the **value** of type `str`.
 
-> :dolphin: All three of these things exist in the computer's memory, which itself is divided into two parts the stack and the heap. Discussing these in great depth is beyond the scope of this post, suffice it to say: A **value** can be stored in the stack or the heap depending on its type, while **variables** and **scope** exist on the stack.
+> 🐬 All three of these things exist in the computer's memory, which itself is divided into two parts the stack and the heap. Discussing these in great depth is beyond the scope of this post, suffice it to say: A **value** can be stored in the stack or the heap depending on its type, while **variables** and **scope** exist on the stack.
 
 The **variable** and the **value** are closely related, with their relationship governed by the following three rules:
 
@@ -48,7 +48,7 @@ The **variable** and the **value** are closely related, with their relationship 
 2. There can only be one variable for each value at a time.
 3. A variable and its value are only valid while they are in scope.
 
-> :hibiscus: **There's an apparent exception to rule 2**: Data on the stack can be cheaply and quickly copied: 
+> ➿ **There's an apparent exception to rule 2**: Data on the stack can be cheaply and quickly copied: 
 > ```
 > let x: str = "hello";
 > let y = x;
@@ -87,7 +87,7 @@ The **scope** is the context in which a given variable is valid, typically the c
 
 This understanding neatly plays out in practice, especially when we have nested functions... it is clear that there is only one valid scope at a time.
 
-> :cow: The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. 
+> 🔭 The scope itself is stored on the stack, which has the implication that there is one valid scope at a time (the stack being a Last In First Out queue), with the variables valid within a scope being destroyed when the scope terminates. For example when a function returns, or when there is no more code for a function to run. 
 
 ## Summary
 
@@ -135,7 +135,7 @@ Altogether, this model makes how values occupy space in memory explicit at compi
 In life, we are familiar with borrowing and its rules. Say we rent a car we understand this entitles us to use it but not change it. If we were to change the vehicle, say by swapping its engine, we'd be in trouble, because the original owner would not know what they had anymore! Likewise, if the rental company decided to scrap the car during our rental period we'd be a little annoyed, as something we expected to exist no longer does. 
 
 ![](/assets/2020.6.29-Silverado-Swap.jpg)
-> :truck: When an immutable reference is treated as a mutable one.
+> 🛻 When an immutable reference is treated as a mutable one.
 
 While swapping out a UHaul engine is against the rules of car rentals, we do also have situations where we want to be able to change the thing that we borrow, for example when you take a stained dress to the dry cleaner or a car to a mechanic. In these cases - we grant permission to the borrower, to make changes to the thing that they have borrowed.
 
