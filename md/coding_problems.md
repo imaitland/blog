@@ -19,7 +19,18 @@ Also on [leetcode](https://leetcode.com/gl2748/)
 
 ## Working with Strings
 ### Question
-> Split a string into a vector of strings.
+> Split a string into a vector of its constituent words.
+### Solution
+```
+let a = String::from("hello world foo bar);
+let b: Vec<&str> = a.split(" ").collect();
+let c: Vec<&str> = a.split_whitespace().collect();
+let d: Vec<String> = a.split_whitespace().map(|c|{c.to_string()}).collect();
+
+
+```
+### Question
+> Split a string into a vector of its characters.
 
 ### Solution
 ```
