@@ -2,8 +2,8 @@ use std::fs;
 use std::env;
 use rouille::{router, Response};
 
-mod render;
-mod build;
+mod render_html;
+mod page_builder;
 
 fn main(){
 
@@ -21,7 +21,7 @@ fn main(){
 
     let address = format!("0.0.0.0:{}", port);
     if build == true {
-        match build::page_builder::build() {
+        match page_builder::build() {
             Ok(_r) => {
                 println!("Build complete");
             },
@@ -44,14 +44,14 @@ fn main(){
                 rouille::match_assets(&request, ".")
             },
             (GET) ["/"] => {
-                let index_html = build::page_builder::index_page();
+                let index_html = page_builder::index_page();
                 Response::html(index_html)
             },
             (GET) ["/{id}", id: String] => {
                 let file_path = ["md/", &id, ".md"].join("");
                 match fs::read_to_string(file_path) {
                     Ok(contents) => {
-                        let md_html = build::page_builder::md_page(contents);
+                        let md_html = page_builder::md_page(contents);
                         Response::html(md_html)
                     }
                     Err(_why) => {
