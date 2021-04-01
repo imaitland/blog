@@ -26,8 +26,6 @@ let a = String::from("hello world foo bar);
 let b: Vec<&str> = a.split(" ").collect();
 let c: Vec<&str> = a.split_whitespace().collect();
 let d: Vec<String> = a.split_whitespace().map(|c|{c.to_string()}).collect();
-
-
 ```
 ### Question
 > Split a string into a vector of its characters.
@@ -66,6 +64,16 @@ match c.to_string().as_str() {
     "c" => {},
     _ => {}
 }
+```
+
+### Question
+> Sort an array of mixed (numbers / letters/ other stuff) values
+### Solution
+```
+let my_jumble = vec!["hello1", "t3hat's cool", "7". "8"];
+my_jumble.sort_by(|a, b|{
+    
+})
 ```
 ## Accessing `Rc<RefCell<T>>`
 

@@ -31,7 +31,7 @@ Ownership consists of 3 things.
 So that this function defintion:
 ```
 fn main() {
-  let x = "hello"
+  let x = "hello";
 }
 ```
 Can be understood like this:

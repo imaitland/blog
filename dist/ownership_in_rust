@@ -279,7 +279,7 @@ code {
 </ol>
 <p>So that this function defintion:</p>
 <pre><code>fn main() {
-  let x = "hello"
+  let x = "hello";
 }
 </code></pre>
 <p>Can be understood like this:</p>
