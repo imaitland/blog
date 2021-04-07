@@ -268,8 +268,9 @@ code {
 <ul>
 <li><a href="/bit_manipulation" rel="noopener noreferrer">Bit manipulation</a></li>
 </ul>
-<h1>Data Structures implemented in Rust.</h1>
+<h1>Data Structures.</h1>
 <ul>
+<li><a href="/graph" rel="noopener noreferrer">Graph</a></li>
 <li><a href="/linked_list" rel="noopener noreferrer">Linked List</a></li>
 <li><a href="/binary_tree" rel="noopener noreferrer">Binary Tree</a></li>
 </ul>

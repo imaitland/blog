@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="A Linked List in Rust"></meta><meta property="og:description" content="A Linked List in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Linked List"></meta><meta name="twitter:description" content="A Linked List in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Linked List</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Index Pointers"></meta><meta property="og:description" content="Index Pointers"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Index Pointer"></meta><meta name="twitter:description" content="Index Pointers"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Index Pointer</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,120 +264,36 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Linked List</h1>
-<h2>First pass.</h2>
-<p>This post relies heavily on this excellent post, <a href="https://rust-unofficial.github.io/too-many-lists/" rel="noopener noreferrer">Learn Rust with Entirely Too Many Linked Lists.</a></p>
-<p>In that post the author lists many of the reasons why implementing a Linked List from scratch might be a bad idea, and the post on <a href="/index_pointer" rel="noopener noreferrer">index pointers</a> explains what alternatives exist.</p>
-<p>But using index pointers, or <code>std::collections::LinkedList</code>  deprives us of the learning opportunity that is the real reason why we might implement a Linked List from scratch, and the motivation behind the article mentioned earlier. So let's have a shot at that.</p>
-<p>From the start this linked list with <code>new</code> and <code>push</code> implementations demonstrates and important concept regarding Ownership.</p>
-<pre><code>#![allow(unused)]
-fn main() {
-    struct List&lt;T&gt; {
-        head: Link&lt;T&gt;
-    };
-    
-    type Link&lt;T&gt; = Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;;
-    
-    struct Node&lt;T&gt; {
-        elem: T,
-        next: Link&lt;T&gt;
-    }
-    
-    impl&lt;T&gt; List&lt;T&gt; {
-    
-        fn new() -&gt; Self {
-            List {
-                head: None
-            }
-        }
-        
-        fn push(&amp;mut self, e: T) {
-            let new_node = Box::new(Node {
-                elem: e,
-                next: self.head
-            });
-            self.head = Some(new_node);
-        }
-    }
-}
-</code></pre>
-<p>In the above implementation, there's the following compilation error:</p>
-<pre><code>31 |                 next: self.head
-   |                       ^^^^^^^^^
-   |                       |
-   |                       move occurs because `self.head` has type `Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;`, which does not implement the `Copy` trait
-   |                       help: consider borrowing the `Option`'s content: `self.head.as_ref()`
-</code></pre>
-<h3>Understanding the problem.</h3>
-<ul>
-<li>
-<p>The variable <code>self</code> is a mutable reference to the <code>List</code> struct that <code>push</code> was called on.</p>
-</li>
-<li>
-<p>The mutable reference to a value has its ownership <strong>moved</strong> from the variable <code>self.head</code> to the variable <code>new_node.next</code>, with this line:</p>
-</li>
-</ul>
-<pre><code>next: self.head
-</code></pre>
-<ul>
-<li>
-<p>At this point the <code>head</code> field on our <code>List</code> struct does not have a value, because it has just been moved to the <code>next</code> field of a <code>Node</code> struct.</p>
-</li>
-<li>
-<p>i.e <code>self.head</code> is a variable without a value...</p>
-</li>
-<li>
-<p>We know that we'll later give <code>self.head</code> a valid value - <code>Some(new_node)</code> and all will be right with the world.</p>
-</li>
-<li>
-<p><strong>BUT</strong> the compiler doesn't want to leave this up to chance, what if we forgot, then we risk accessing <code>self.head</code> and it pointing to a location in memory that it does not own, or that does not exist! We're violating the core ownership rule that a value can only have one owner.</p>
-</li>
-</ul>
-<p>Therefore we need a way of passing ownership to <code>new_node.next</code> while stuffing a pacifier in <code>self.head</code>'s mouth to stop it crying out, at least until we can give it a useful value...</p>
-<h3>The Solution.</h3>
-<p>Unfortunately in this case the compiler's suggestion, won't be exactly what we want. That gives <code>new_node.next</code> ownership of a <em>reference</em>, but in this case, the <code>next</code> field of the <code>Node</code> struct cannot be a reference.</p>
-<p>Our solution is: <a href="https://doc.rust-lang.org/std/mem/fn.take.html" rel="noopener noreferrer"><code>take</code></a> in the docs it states:</p>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Index Pointers</h1>
+<p>In my post on Linked Lists I allude to this excellent post, <a href="https://rust-unofficial.github.io/too-many-lists/" rel="noopener noreferrer">Learn Rust with Entirely Too Many Linked Lists.</a></p>
+<p>In that post the author lists many of the reasons why implementing a Linked List from scratch might be a bad idea, and the official rust documentation for <code>std::collections::LinkedList</code> nudges us in a similar way... </p>
 <blockquote>
-<p>... allows taking ownership of a struct field by replacing it with an "empty" value. Without take you can run into issues...</p>
+<p><a href="https://doc.rust-lang.org/std/collections/struct.LinkedList.html" rel="noopener noreferrer">"It is almost always better to use Vec or VecDeque because array-based containers are generally faster, more memory efficient, and make better use of CPU cache."</a></p>
 </blockquote>
-<p>What <code>take</code> does (as its name suggests) is to <code>take</code> the value from a struct field, and in the same moment, give that same field an empty value  as a pacifier until it can give it a meaningful value, typically one that uses the <code>taken</code> value somewhere.</p>
-<p>Great! let's use this nifty feature to solve our ownership woes and continue, adding a pop method!</p>
-<pre><code>struct List&lt;T&gt; {
-    head: Link&lt;T&gt;
-}
+<p>But what might they mean by this?!</p>
+<p>Are they suggesting that we use a <code>Vec</code> instead of a linked list? Or Use a <code>Vec</code> <em>as</em> as linked list?</p>
+<p>I actually think they mean both..., use a vanilla <code>Vec</code> whereever possible and where that is insufficient, implement a Linked List by doing something like this:</p>
+<blockquote>
+<p>The high-level idea is that we will represent a “pointer” to the next item in the list using an index.</p>
+</blockquote>
+<pre><code>let my_linked_list = vec![(Some(1), "hello"), (Some(2), "world")];
 
-type Link&lt;T&gt; = Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;;
+let mut head = my_linked_list[0];
 
-struct Node&lt;T&gt; {
-    elem: T,
-    next: Link&lt;T&gt;
-}
-
-impl&lt;T: std::cmp::PartialEq&gt; List&lt;T&gt; {
-    fn new() -&gt; Self {
-        List {
-            head: None
-        }
-    }
-    fn push(&amp;mut self, e: T) {
-        let new_node = Box::new(Node {
-            elem: e,
-            next: self.head.take()
-        });
-        self.head = Some(new_node);
-    }
-
-    fn pop(&amp;mut self) -&gt; Option&lt;T&gt; {
-        match self.head.take() { // after calling self.head.take(), self.head gets the 'empty' pacifier.
-            None =&gt; None,
-            Some(n) =&gt; {
-                self.head = n.next; // here we rehydrate the empty self.head with something meanigful.
-                Some(n.elem)
-            }
+loop {
+    let (next, val) = head;
+    match next {
+        Some(nx) =&gt; {
+            println!("{}", val);
+            head = my_linked_list[nx];
+        },
+        _ =&gt; {
+            break;
         }
     }
 }
 </code></pre>
+<p>I guess you could call these <code>index pointers</code>.</p>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {

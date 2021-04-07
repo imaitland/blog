@@ -269,7 +269,7 @@ code {
 <p>This <a href="https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370" rel="noopener noreferrer">gist</a> offers a useful starting point when attempting to write a Binary Tree data structure from scratch in Rust.</p>
 <p>But doesn't go far to explain why you might want to do this... <a href="https://doc.rust-lang.org/std/collections/index.html" rel="noopener noreferrer">Rust provides a far more complete and likely performant <code>BTreeMap</code> and <code>BTreeSet</code> as part of the <code>std</code> library, along with a bunch of useful context for when to use it</a>. </p>
 <p>The obvious answer is why not, Binary Trees are a fundamental data structure and getting to grips with their internals is a useful learning exercise.
-Implementing a binary tree from scratch is useful if you want to implement novel traversals, detect cycles or implement custom methods on the struct. As a recursive data structure, it is also a pretty good introduction to Rust's smart pointers.</p>
+Implementing a binary tree from scratch is useful if you want to implement novel traversals or implement custom methods on your struct. As a recursive data structure, it is also a pretty good introduction to Rust's smart pointers.</p>
 <h3>First pass</h3>
 <pre><code>#[derive(Debug)]
 struct TreeNode&lt;T&gt; {
@@ -300,6 +300,15 @@ fn main() {
 <p>In this case the contents of the <code>Box</code> is a left or right branch of the Binary Tree, which itself contains more Binary Trees, possibly for ever. For this reason the size of the leaves of the node are not known at compile time. </p>
 <blockquote>
 <p><strong>Takeaway:</strong> In this case the <code>Box</code> smart pointer allows us to have a recursive data type.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> The Box smart pointer has one weakness, while it can be used for recursive data structures it cannot be used for cyclic ones...<a href="http://featherweightmusings.blogspot.com/2015/04/graphs-in-rust.html" rel="noopener noreferrer">In fact, in Rust, you cannot have cyclical ownership, or at least not easily, this is ok for our purposes as Binary Trees, typically cannot be cyclical.</a>. </p>
+</blockquote>
+<blockquote>
+<p><strong>Note on a Note:</strong> Cycles can be handled by using pointers other than <code>Box</code>, notably <code>Rc</code>, <code>arenas</code> or the graph data structures in the <code>petgraph</code> library, handling cycles might also be a reason for wanting a garbage collector!: </p>
+<blockquote>
+<p><a href="https://manishearth.github.io/blog/2021/04/05/a-tour-of-safe-tracing-gc-designs-in-rust/#why-write-gcs-for-rust" rel="noopener noreferrer">"Firstly, sometimes you need to manage memory with cycles and Rc is inadequate for the job since Rc-cycles get leaked. petgraph or an arena are often acceptable solutions for this kind of pattern..."</a></p>
+</blockquote>
 </blockquote>
 <h2>Binary Tree Insertion.</h2>
 <p>Right now we can create a new binary tree, let's go a step further and see how adding nodes to it works out.</p>

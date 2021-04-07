@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="A graph in Rust"></meta><meta property="og:description" content="A graph in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Graph"></meta><meta name="twitter:description" content="A graph in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Graph</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Implementing a graph in Rust"></meta><meta property="og:description" content="Implementing a graph in Rust"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Graph"></meta><meta name="twitter:description" content="Implementing a graph in Rust"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Graph</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -265,37 +265,238 @@ code {
     display: inline-block;
     opacity: 1;
 }</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>A tale of two lists</h1>
-<p>Graphs crop up alot in Computer Science, and life for that matter. Part of their ubiquity is derived from their simplicity. At their core a graph consists of a list of things and a second list of relationships between those things.</p>
-<p>In the language of graphs, we call the things in the first list, "Nodes", or "Vertices", and the relationships between them "Edges".</p>
-<p>Now, as intimidating as this might seem, its good not to let the fancy language get the better of you, you might of heard of "Breadth First Search" and been a little intimidated, it's the kind of thing brought up by people trying to prove something, which isn't such a bad thing, but if you don't have an academic background, it's enough to put you off... that's a shame, I promise they're useful and just remember, all we're talking about is a list of things, and a list of relationships between those things. This is an incredibly useful way to simplify sometimes complex concepts.</p>
+<p>Graphs crop up a lot in life. Part of their usefulness comes from their simplicity. At their core, they consist of two lists. </p>
+<ol>
+<li>A list of things</li>
+<li>A list of links between those things.</li>
+</ol>
 <ul>
-<li>We might use a list of people, and a list of how those people are related, to represent a family tree.</li>
-<li>We might use a list of towns, and a list of roads between those towns, to find a route from one place to another.</li>
-<li>We might have a list of different positions a chess piece has been in in the course of a game, and another list describing the order of these positions.</li>
-<li>We might use a list of ingredients, and a list of instructions to combine them, to make a delicious meal.</li>
-<li>We might use a list of blog posts, and a list of links between them to represent a blog!</li>
+<li>We might use a list of people and a list of how they are related, representing a family tree.</li>
+<li>We might use a list of towns, and a list of roads between those towns, to find a route from one place to another or draw a map.</li>
+<li>We might have a list of different positions a chess piece has been in in the course of a game and another list describing how each position followed the previous one.</li>
+<li><a href="https://depth-first.com/articles/2020/02/17/graphs-in-rust-introducting-graphcore/" rel="noopener noreferrer">We might use a list of atoms and bonds between them to represent a molecule.</a></li>
+<li>We might use a list of blog posts and links between them to represent a blog.</li>
 </ul>
-<p>The list goes on. </p>
-<p>Now having accepted their usefulness, and gotten over their general smell of being the stuff of high-fallutin FAANG interviews let's try and implement them.</p>
-<p>Now nn Rusty terms, a graph consists of a vector of nodes and a vector of edges and this is reflected by the mathematical definition of a graph:</p>
-<pre><code>G = (V, E);
+<p>In the language of graphs, we call the things in the first list <em>nodes</em> and the connections between them <em>edges.</em> </p>
+<p>Edges, nodes and, the graphs they make up can have different properties.</p>
+<ul>
+<li>
+<p>They can be <em>sparse</em> (when nodes don't have many edges each) or <em>dense</em> (when nodes have a lot of edges between them).</p>
+</li>
+<li>
+<p>When the nodes in a graph are assigned geometric positions, we say the graph is <em>embedded</em>; sometimes, these graphs don't need edges at all. In these cases, edges are derived from the nodes' embeddedness, for example, deriving interplanetary gravitational forces purely from the relative distance between bodies and their respective masses or finding the shortest delivery route for a truck, knowing the locations of the stores it must visit.</p>
+</li>
+<li>
+<p>When a cycle exists, we say the graph is <em>cyclic</em>; if a cycle is impossible or non-useful, then the graph is <em>acyclic</em>.  Could you imagine a graph representation of your favorite recipe being cyclic? or a family tree for that matter!?</p>
+</li>
+</ul>
+<p><img src="https://www.traditioninaction.org/OrganicSociety/Images_1-100/A_019_Hapsburgs.jpg" alt=""></p>
+<blockquote>
+<p>The European Hapsburg dynasty - perhaps it should've been an acyclic graph?</p>
+</blockquote>
+<ul>
+<li>
+<p>When edges in our graph have an additional property beyond the node they come from and the node they go to, we often say they are <em>weighted</em>. Weighted edges have a weight property that stores some critical value for the relationship that it represents. Roads between cities have distances which we can include as the 'weight' of our edges.</p>
+</li>
+<li>
+<p>When edges in our graph have a specific direction property, we have a <em>directed</em> graph. A Graph of friends would be <em>undirected</em> since we like to assume the relationship is reciprocal. A graph of intersections and roads would be <em>directed</em> because streets are often one-way.</p>
+</li>
+</ul>
+<p>We can see that graphs can have specific properties derived from their constituent nodes and edges. They can be sparse, embedded, cyclic, weighted, directed, or any combination of those things and their obverses!</p>
+<p>Now, as intimidating as this might seem, it's good not to let the fancy language get the better of you; more often than not, the type of graph you want will emerge as you work. </p>
+<p>It is enough to remember that any graph can be represented by two lists, in mathematical terms:</p>
+<pre><code>G = (N, E);
 </code></pre>
-<pre><code>struct Graph {
-    head: Option&lt;Box&lt;GraphNode&gt;&gt;
-}
+<p>In terms of Rust, we can say a graph consists of a vector of nodes and a vector of edges.</p>
+<pre><code>Graph:
+    N0 ---E0---&gt; N1 ---E1---&gt; 2
+    |                         ^
+    E2                        |
+    |                         |
+    v                         |
+    N3 ----------E3-----------+
+</code></pre>
+<p>Let's try and represent this graph:</p>
+<p>There are a few ways we could approach this; one involves an <code>adjacency  matrix</code>:</p>
+<pre><code>N  0    1    2    3
+0  0    1    0    1
+1  0    0    1    0
+2  0    0    0    0
+3  0    0    1    0
+</code></pre>
+<p>See what's happening there?  Edges are represented by a <code>1</code> at coordinates <code>(NX, NY).</code></p>
+<p>In Rust, our adjacency matrix for this graph could look like this.</p>
+<pre><code>let N0 = vec![0,1,0,1];
+let N1 = vec![0,0,1,0];
+let N2 = vec![0,0,0,0];
+let N3 = vec![0,0,1,0];
 
-struct GraphNode &lt;T&gt; {
-    value: T,
-    children: Option&lt;Vec&lt;Box&lt;GraphNode&gt;&gt;&gt;
-}
+let graph = vec![N0,N1,N2,N3];
+</code></pre>
+<p>One characteristic of this approach is that we're using our nodes' indices to identify and access them. When we iterate over the list at <code>graph[0]</code>, we can find, by implication, all the edges between it <code>Node 0</code> and other nodes. In the case of finding a <code>1</code>, at index <code>1</code> and <code>3</code>, we know that <code>Node 0</code> identified by <code>graph[0]</code> has edges connecting it to <code>Node 1</code> and <code>Node 3</code>. that is, for <code>Node 0</code> edges <code>0-&gt;1</code> and <code>0-&gt;3</code> exist.</p>
+<pre><code>let mut from_index = 0;
 
-impl &lt;T&gt; Graph&lt;T&gt; {
-    fn new() -&gt; Self{
-        Graph {
-            head: None
+while node_index &lt; graph.len() {
+    let mut to_index = 0;
+    let mut current_node = graph[from_index];
+    while to_index &lt; current_node.len() {
+        match has_edge {
+            0 =&gt; {},
+            1 =&gt; {
+                println!("Edge, from: {from_index}, to: {to_index}");
+            }
         }
     }
-}</code></pre>
+    from_index += 1;
+}
+</code></pre>
+<p>Another way of representing this is to treat the edges as our data. To do this, we might define our graph as a list of edges.</p>
+<pre><code>let edges = [
+    (0,1),(0,3),
+    (1,2),
+    (3,2)
+];
+</code></pre>
+<p>We could then derive our nodes from our edge data, for example:</p>
+<pre><code>let mut nodes = vec![];
+
+for edge in edges.iter() {
+    let (from, to) = edge;
+    for i in 0..std::cmp::max(*from,*to) + 1 {
+        if i &gt;= nodes.len() {
+            nodes.push(i as i32);
+        }
+    }
+}
+
+println!("Nodes: {:?}", nodes);
+</code></pre>
+<p>Reviewing the adjacency matrix approach, particularly this last one, we can note that it has some strengths.</p>
+<ul>
+<li>It makes it easy to find if an edge exists in our graph.</li>
+<li>It makes it easy to find if a node exists in our graph.</li>
+<li>Edge insertion and deletion are rapid.</li>
+</ul>
+<p><a href="https://docs.rs/petgraph/0.5.1/petgraph/matrix_graph/struct.MatrixGraph.html#method.from_edges" rel="noopener noreferrer">This approach is similar to the implementation of a <code>matrix_graph</code> in the <code>petgraph</code> library.</a></p>
+<p>However, the adjacency matrix graph does have a flaw - for sparse graphs with many nodes and relatively few edges, it uses excessive space, <code>O(N*N),</code> this issue is compounded in the case of undirected graphs where nodes can share edges.</p>
+<blockquote>
+<p>Imagine a graph of intersections within a gridded American city, with 3,000 intersections, each representing where two roads cross, we have 6,000 edges (remember junctions share edges) we end up with an adjacency matrix of <code>3,000 * 3,000 = 9,000,000</code> cells, with most (9,000,000 - 6,000) of them being empty!</p>
+</blockquote>
+<p>At this point, our implementation tends away from an <code>adjacency matrix</code> and relies more on <code>adjacency lists</code>; these are better at representing sparse graphs; they do this by using a linked list to store the edges adjacent to each node. <code>O(N+E)</code></p>
+<p>As we saw in the <a href="/index_pointer" rel="noopener noreferrer">Index Pointer</a> post, we can represent linked lists as vectors using <code>index pointers</code>.</p>
+<pre><code>pub struct Graph {
+    nodes: Vec&lt;NodeData&gt;,
+    edges: Vec&lt;EdgeData&gt;,
+}
+
+pub type NodeIndex = usize;
+
+pub struct NodeData {
+    first_outgoing_edge: Option&lt;EdgeIndex&gt;,
+}
+pub type EdgeIndex = usize;
+
+pub struct EdgeData {
+    target: NodeIndex,
+    next_outgoing_edge: Option&lt;EdgeIndex&gt;
+}
+</code></pre>
+<blockquote>
+<p>As you can see, an edge contains a target node index and an optional index for the next outgoing edge. All edges in a particular linked list share the same source, which is implicit. Thus there is a linked list of outgoing edges for each node that begins in the node data for the source and is threaded through each of the edge datas.
+** source:** <a href="http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/#the-high-level-idea" rel="noopener noreferrer">"Modeling graphs in Rust using vector indices"</a></p>
+</blockquote>
+<p>Let's have a shot at writing an <code>add_node</code> and <code>add_edge</code> method for our struct:</p>
+<pre><code>impl Graph {
+    fn new() -&gt; Self {
+        Graph {
+            nodes: vec![],
+            edges: vec![],
+        }
+    }
+    fn add_node(&amp;mut self) -&gt; NodeIndex {
+        let ix = self.nodes.len();
+        self.nodes.push(NodeData{first_outgoing_edge: None});
+        ix
+    }
+    fn add_edge(&amp;mut self, from: NodeIndex, to: NodeIndex) -&gt; EdgeIndex {
+        let ix = self.edges.len();
+        let node_data = &amp;mut self.nodes[from];
+        // Don't worry about duplicate edges for now.
+        self.edges.push(
+            EdgeData {
+                target: to,
+                next_outgoing_edge: node_data.first_outgoing_edge
+            }
+        );
+        node_data.first_outgoing_edge = Some(ix);
+        ix
+    }
+}
+</code></pre>
+<p>Not too shabby, right now, we can build our example graph like this:</p>
+<pre><code>let mut my_graph = Graph::new();
+
+my_graph.add_node();
+my_graph.add_node();
+my_graph.add_node();
+my_graph.add_node();
+
+my_graph.add_edge(0,1);
+my_graph.add_edge(0,3);
+my_graph.add_edge(1,2);
+my_graph.add_edge(3,2);
+</code></pre>
+<p>But where our implementation shines is in traversing our graph. Let's write a method that will allow us to do that:</p>
+<pre><code>impl Graph {
+    fn traverse(&amp;mut self, curr: usize) {
+        if self.visited[curr] == true {
+            return;
+        };
+        // Get the first outgoing edge for our node.
+        match self.nodes[curr].first_outgoing_edge {
+            Some(mut edge_index) =&gt; {
+                // Traverse the target node for this edge...
+                self.traverse(self.edges[edge_index].target);
+                // Find all connected nodes and traverse them...
+                while let Some(next) = self.edges[edge_index].next_outgoing_edge {
+                    // update edge_index.
+                    edge_index = next;
+                    // traverse the target node for this edge.
+                    self.traverse(self.edges[edge_index].target);
+                }
+            },
+            None =&gt; {
+                // No outgoing edges on this node.
+                println!("No connected nodes.");
+            }
+            
+        }
+        println!("Visited Node: {}", curr);
+        self.visited[curr] = true;
+    }
+}
+</code></pre>
+<p>Et voila! Note: because we used an index as a pointer to relate our <code>nodes</code> and <code>edges,</code> we didn't have to dive into the tricky territory of smart pointers like <code>Rc</code>!</p>
+<blockquote>
+<p>"This approach plays very well to Rust's strengths. This is because, unlike an Rc pointer, an index alone is not enough to mutate the graph: you must use one of the &amp;mut self methods in the graph. This means that can track the mutability of the graph as a whole in the same way that it tracks the mutability of any other data structure."</p>
+</blockquote>
+<p>The next step will be to finesse our <code>traversal</code> method using an iterator; for example, wouldn't it be nice to do something like this:</p>
+<pre><code>let my_node = my_graph.successors(node_index);
+let connected_nodes = my_node.iter().collect();
+</code></pre>
+<p>Finally, we'll have a shot at implementing a method for detecting cycles!</p>
+<p>Review questions:</p>
+<ul>
+<li>Is it <code>depth-first search</code> or <code>breadth-first search</code> that we have implemented?</li>
+<li>How might we implement the other search algorithm.</li>
+</ul>
+<p>Reading list:</p>
+<ul>
+<li><a href="http://featherweightmusings.blogspot.com/2015/04/graphs-in-rust.html" rel="noopener noreferrer">Graphs in Rust</a></li>
+<li><a href="http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/" rel="noopener noreferrer">Modeling Graphs in Rust Using Vector Indices</a></li>
+<li><a href="https://depth-first.com/articles/2020/01/06/a-minimal-graph-api/" rel="noopener noreferrer">A Minimal Graph Api</a></li>
+<li><a href="https://depth-first.com/articles/2020/02/17/graphs-in-rust-introducting-graphcore/" rel="noopener noreferrer">Graphs in Rust, Introducing Graph Code</a></li>
+</ul>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {

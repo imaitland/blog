@@ -6,7 +6,7 @@ description = "Working with remainder in Rust"
 date = 2021-02-27
 tag = "rust"
 image = "/assets/og-image-512x512.png"
-icon = "➗"
+icon = "🍰"
 draft = false
 +++
 

@@ -18,7 +18,7 @@ This [gist](https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370) offers a usefu
 But doesn't go far to explain why you might want to do this... [Rust provides a far more complete and likely performant `BTreeMap` and `BTreeSet` as part of the `std` library, along with a bunch of useful context for when to use it](https://doc.rust-lang.org/std/collections/index.html). 
 
 The obvious answer is why not, Binary Trees are a fundamental data structure and getting to grips with their internals is a useful learning exercise.
-Implementing a binary tree from scratch is useful if you want to implement novel traversals, detect cycles or implement custom methods on the struct. As a recursive data structure, it is also a pretty good introduction to Rust's smart pointers.
+Implementing a binary tree from scratch is useful if you want to implement novel traversals or implement custom methods on your struct. As a recursive data structure, it is also a pretty good introduction to Rust's smart pointers.
 
 ### First pass
 
@@ -54,6 +54,12 @@ At this point perhaps the most exotic thing about our implementation is the use 
 In this case the contents of the `Box` is a left or right branch of the Binary Tree, which itself contains more Binary Trees, possibly for ever. For this reason the size of the leaves of the node are not known at compile time. 
 
 > **Takeaway:** In this case the `Box` smart pointer allows us to have a recursive data type.
+
+> **Note:** The Box smart pointer has one weakness, while it can be used for recursive data structures it cannot be used for cyclic ones...[In fact, in Rust, you cannot have cyclical ownership, or at least not easily, this is ok for our purposes as Binary Trees, typically cannot be cyclical.](http://featherweightmusings.blogspot.com/2015/04/graphs-in-rust.html). 
+
+> **Note on a Note:** Cycles can be handled by using pointers other than `Box`, notably `Rc`, `arenas` or the graph data structures in the `petgraph` library, handling cycles might also be a reason for wanting a garbage collector!: 
+>> ["Firstly, sometimes you need to manage memory with cycles and Rc<T> is inadequate for the job since Rc-cycles get leaked. petgraph or an arena are often acceptable solutions for this kind of pattern..."](https://manishearth.github.io/blog/2021/04/05/a-tour-of-safe-tracing-gc-designs-in-rust/#why-write-gcs-for-rust)
+
 
 ## Binary Tree Insertion.
 

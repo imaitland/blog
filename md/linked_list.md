@@ -12,11 +12,15 @@ draft = false
 
 # Linked List
 
-This post relies heavily on this excellent post, [Learn Rust with Entirely Too Many Linked Lists.](https://rust-unofficial.github.io/too-many-lists/)
-
 ## First pass.
 
-This linked list with `new` and `push` implementations demonstrates and important concept regarding Ownership.
+This post relies heavily on this excellent post, [Learn Rust with Entirely Too Many Linked Lists.](https://rust-unofficial.github.io/too-many-lists/)
+
+In that post the author lists many of the reasons why implementing a Linked List from scratch might be a bad idea, and the post on [index pointers](/index_pointer) explains what alternatives exist.
+
+But using index pointers, or `std::collections::LinkedList`  deprives us of the learning opportunity that is the real reason why we might implement a Linked List from scratch, and the motivation behind the article mentioned earlier. So let's have a shot at that.
+
+From the start this linked list with `new` and `push` implementations demonstrates and important concept regarding Ownership.
 
 ```
 #![allow(unused)]
@@ -47,7 +51,6 @@ fn main() {
             });
             self.head = Some(new_node);
         }
-        
     }
 }
 ```

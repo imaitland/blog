@@ -288,7 +288,7 @@ println!("{}", c.rem_euclid(d)); // 4
 <h4>So what's happening here?!</h4>
 <p>Note the different results, 
 <code>a % b</code> is <code>-3</code> because it's simply calculated the remainder.</p>
-<p><code>a.rem_euclid(b)</code> is <code>4</code> because we take the first quotient of b that overshoots <code>-10</code>, and then add a number to walk back to our target, in this case: <code>7 * -2 = -14</code>, <code>-14 + 4 = 10</code>, so our 'remainder' is 4.</p>
+<p><code>a.rem_euclid(b)</code> is <code>4</code> because we take the first quotient of b that overshoots <code>-10</code>, and then add a number to walk back to our target, in this case: <code>7 * -2 = -14</code>, <code>-14 + 4 = -10</code>, so our 'remainder' is 4.</p>
 <p>Similarly, the remainder from dividing -20 by 8, is <code>8 * -3 = -24</code> which we walk back to <code>-20</code> by adding <code>4</code>, so our, 'remainder' is 4.</p>
 </div><script>anime({
     targets: '.reveal',
