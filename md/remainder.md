@@ -39,6 +39,6 @@ println!("{}", c.rem_euclid(d)); // 4
 Note the different results, 
 `a % b` is `-3` because it's simply calculated the remainder.
 
-`a.rem_euclid(b)` is `4` because we take the first quotient of b that overshoots `-10`, and then add a number to walk back to our target, in this case: `7 * -2 = -14`, `-14 + 4 = 10`, so our 'remainder' is 4.
+`a.rem_euclid(b)` is `4` because we take the first quotient of b that overshoots `-10`, and then add a number to walk back to our target, in this case: `7 * -2 = -14`, `-14 + 4 = -10`, so our 'remainder' is 4.
 
 Similarly, the remainder from dividing -20 by 8, is `8 * -3 = -24` which we walk back to `-20` by adding `4`, so our, 'remainder' is 4.
