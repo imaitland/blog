@@ -276,7 +276,7 @@ code {
 <blockquote>
 <p>The high-level idea is that we will represent a “pointer” to the next item in the list using an index.</p>
 </blockquote>
-<pre><code>let my_linked_list = vec![(Some(1), "hello"), (Some(2), "world")];
+<pre><code>let my_linked_list = vec![(Some(1), "hello"), (Some(2), "world"), (None, "The end!")];
 
 let mut head = my_linked_list[0];
 

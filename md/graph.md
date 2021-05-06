@@ -244,7 +244,7 @@ impl Graph {
 }
 ```
 
-Et voila! Note: because we used an index as a pointer to relate our `nodes` and `edges,` we didn't have to dive into the tricky territory of smart pointers like `Rc`!
+Importantly! ecause we used an index as a pointer to relate our `nodes` and `edges,` we didn't have to dive into the tricky territory of smart pointers like `Rc`!
 
 > "This approach plays very well to Rust's strengths. This is because, unlike an Rc pointer, an index alone is not enough to mutate the graph: you must use one of the &mut self methods in the graph. This means that can track the mutability of the graph as a whole in the same way that it tracks the mutability of any other data structure."
 

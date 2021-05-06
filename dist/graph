@@ -476,7 +476,7 @@ my_graph.add_edge(3,2);
     }
 }
 </code></pre>
-<p>Et voila! Note: because we used an index as a pointer to relate our <code>nodes</code> and <code>edges,</code> we didn't have to dive into the tricky territory of smart pointers like <code>Rc</code>!</p>
+<p>Importantly! ecause we used an index as a pointer to relate our <code>nodes</code> and <code>edges,</code> we didn't have to dive into the tricky territory of smart pointers like <code>Rc</code>!</p>
 <blockquote>
 <p>"This approach plays very well to Rust's strengths. This is because, unlike an Rc pointer, an index alone is not enough to mutate the graph: you must use one of the &amp;mut self methods in the graph. This means that can track the mutability of the graph as a whole in the same way that it tracks the mutability of any other data structure."</p>
 </blockquote>

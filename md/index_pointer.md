@@ -27,7 +27,7 @@ I actually think they mean both..., use a vanilla `Vec` whereever possible and w
 > The high-level idea is that we will represent a “pointer” to the next item in the list using an index.
 
 ```
-let my_linked_list = vec![(Some(1), "hello"), (Some(2), "world")];
+let my_linked_list = vec![(Some(1), "hello"), (Some(2), "world"), (None, "The end!")];
 
 let mut head = my_linked_list[0];
 
