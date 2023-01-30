@@ -270,13 +270,8 @@ code {
 <ul>
 <li>A static site generator (i.e this blog!)</li>
 </ul>
-<h2>Notes</h2>
-<ul>
-<li><a href="/ownership_in_rust" rel="noopener noreferrer">Ownership in Rust</a></li>
-</ul>
 <h2>Learning Exercises</h2>
 <ul>
-<li><a href="/coding_problems" rel="noopener noreferrer">Coding Problems</a></li>
 <li>Multi-threaded server implementation</li>
 <li>Parser Combinator</li>
 <li>KV store implementation</li>
