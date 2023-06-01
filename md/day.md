@@ -9,3 +9,5 @@ image = "/assets/og-image-512x512.png"
 icon = "🌞"
 draft = false
 +++
+
+[night](/night)

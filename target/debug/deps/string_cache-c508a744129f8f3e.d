@@ -1,0 +1,11 @@
+/Users/iainmaitland/Desktop/ListFold/blog/target/debug/deps/string_cache-c508a744129f8f3e.rmeta: /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/lib.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/atom.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/dynamic_set.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/static_sets.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/trivial_impls.rs
+
+/Users/iainmaitland/Desktop/ListFold/blog/target/debug/deps/libstring_cache-c508a744129f8f3e.rlib: /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/lib.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/atom.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/dynamic_set.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/static_sets.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/trivial_impls.rs
+
+/Users/iainmaitland/Desktop/ListFold/blog/target/debug/deps/string_cache-c508a744129f8f3e.d: /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/lib.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/atom.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/dynamic_set.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/static_sets.rs /Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/trivial_impls.rs
+
+/Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/lib.rs:
+/Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/atom.rs:
+/Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/dynamic_set.rs:
+/Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/static_sets.rs:
+/Users/iainmaitland/.cargo/registry/src/github.com-1ecc6299db9ec823/string_cache-0.8.7/src/trivial_impls.rs:

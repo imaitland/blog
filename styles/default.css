@@ -1,19 +1,19 @@
-html.jsEnabled #NoJS {display: none;}
+html.jsEnabled #NoJS {
+  display: none;
+}
 
 body {
-    background: #0F2027;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #0f2027; /* fallback for old browsers */
 }
 
 .posts-index {
-    color: white;
-    margin-top: 12rem;
+  color: white;
+  margin-top: 12rem;
 }
 .posts-index a {
-    font-family: Helvetica, sans-serif;
-    color: white;
-    text-decoration: none; /* no underline */
+  font-family: Helvetica, sans-serif;
+  color: white;
+  text-decoration: none; /* no underline */
 }
 .logo-blog_page {
 }

@@ -34,13 +34,22 @@ fn main(){
 
     rouille::start_server(address, move |request| {
         router!(request,
+            (GET) ["/resume"] => {
+                Response::redirect_307("/iain_maitland_resume.pdf")
+            },
             (GET) ["/iain_maitland_resume.pdf"] => {
                 rouille::match_assets(&request, ".")
             },
-            (GET) ["/assets/paintings/{painting}", painting: String] => {
+            (GET) ["/photos"] => {
+                Response::redirect_307("https://photos.google.com/share/AF1QipPgG8AHI2l56B7gtrN2GKYQjrJW05wOy1GPVqAGj2eR-RtTuoRFTFdCSN0Z13Zryw?key=U0VsTGFNSkM5VVBOeVFOajg4RXpRNFc2Q25KV1RR")
+            },
+            (GET) ["/notebooks"] => {
+                Response::redirect_307("https://imaitland.github.io/notebooks/lab/index.html")
+            },
+            (GET) ["/assets/paintings/{painting}", _painting: String] => {
                 rouille::match_assets(&request, ".")
             },
-            (GET) ["/assets/{asset}", asset: String] => {
+            (GET) ["/assets/{asset}", _asset: String] => {
                 rouille::match_assets(&request, ".")
             },
             (GET) ["/"] => {
