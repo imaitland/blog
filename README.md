@@ -8,6 +8,10 @@ It includes a build command: `cargo run -- --build` which generates the static a
 
 To get started you just need to add markdown files in the `/md` directory, making sure their frontmatter conforms to the `Frontmatter` struct. The `Graph` struct is generated to represent how all the files in `/md` are related and can be used to create a site index or contents page, in my case I am generating a `force-graph` at `/`.
 
+When I say "how all the files are related", if one file contains a md link, to another, an edge for the graph representation of the site is generated.
+
+Further development is needed to support external links, currently they require a node of their own and an explicit redirect, e.g. the Resume and Notebooks nodes.
+
 All this is made possible by the following dependencies (the JS dependencies are optional and are only used to generate the interactive graph at `/`):
 
 - **Server**: [rouille](https://github.com/tomaka/rouille)
