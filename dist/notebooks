@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="About iain maitland's website"></meta><meta property="og:description" content="About iain maitland's website"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="About"></meta><meta name="twitter:description" content="About iain maitland's website"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>About</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Jupyter notebooks"></meta><meta property="og:description" content="Jupyter notebooks"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Notebooks"></meta><meta name="twitter:description" content="Jupyter notebooks"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Notebooks</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,18 +264,7 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><p><img src="/assets/IMG_5204.JPG" alt="">
-<img src="/assets/IMG_5206.JPG" alt="">
-<img src="/assets/IMG_5208.JPG" alt=""></p>
-<h1>About</h1>
-<p>My name is iain maitland. I'm a software engineer at AWS in Baltimore, Maryland, USA. I've worked at a few startups big and small over the last 6 years or so as a frontend and then fullstack developer. If you want to keep it formal, my <a href="iain_maitland_resume.pdf" rel="noopener noreferrer">resume is here</a>.</p>
-<p>This website was written in <a href="/learning_rust" rel="noopener noreferrer">Rust</a>, the source is here: <a href="https://github.com/imaitland/blog" rel="noopener noreferrer">github/imaitland/blog</a></p>
-<p>I'm currently exploring the world of <a href="/learning_ml" rel="noopener noreferrer">machine learning</a> and ai</p>
-<p>I also enjoy, writing, <a href="/photos" rel="noopener noreferrer">photography</a>, <a href="/poems" rel="noopener noreferrer">poetry</a>, and <a href="/painting" rel="noopener noreferrer">painting</a>!</p>
-<p>If you'd like to contact me</p>
-<ul>
-<li>Email: hi@iainmaitland.com</li>
-</ul>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><p>JupyterHubLite notebooks in the browser</p>
 </div><script>anime({
     targets: '.reveal',
     translateX: function(el) {
