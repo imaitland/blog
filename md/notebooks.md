@@ -10,6 +10,7 @@ icon = "📚"
 draft = false
 +++
 
-JupyterHubLite notebooks in the browser
+For Sketches and playing around - [JupyterHubLite](https://imaitland.github.io/notebooks/lab/index.html)
 
+For notebooks requiring a GPU - [Google Colab](https://drive.google.com/drive/folders/1VZ1WoBqwZc7TFbYK0UEHBwoC2Aiu2t5a?usp=share_link)
 

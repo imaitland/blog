@@ -1,18 +1,17 @@
-use std::fs;
-use std::env;
 use rouille::{router, Response};
+use std::env;
+use std::fs;
 
-mod render_html;
 mod page_builder;
+mod render_html;
 
-fn main(){
-
+fn main() {
     let args: Vec<String> = env::args().collect();
     let mut port = String::from("8080");
     let mut build = false;
     for i in 0..args.len() {
         if args[i] == "--port" {
-            port = args[i+1].to_owned();
+            port = args[i + 1].to_owned();
         }
         if args[i] == "--build" {
             build = true
@@ -24,10 +23,9 @@ fn main(){
         match page_builder::build() {
             Ok(_r) => {
                 println!("Build complete");
-            },
+            }
             Err(_why) => {
                 println!("Build Failed!")
-                
             }
         }
     }
@@ -37,15 +35,15 @@ fn main(){
             //(GET) ["/resume"] => {
                 //Response::redirect_307("/iain_maitland_resume.pdf")
             //},
-            (GET) ["/iain_maitland_resume.pdf"] => {
-                rouille::match_assets(&request, ".")
-            },
             //(GET) ["/photos"] => {
                 //Response::redirect_307("https://photos.google.com/share/AF1QipPgG8AHI2l56B7gtrN2GKYQjrJW05wOy1GPVqAGj2eR-RtTuoRFTFdCSN0Z13Zryw?key=U0VsTGFNSkM5VVBOeVFOajg4RXpRNFc2Q25KV1RR")
             //},
             //(GET) ["/notebooks"] => {
                 //Response::redirect_307("")
             //},
+            (GET) ["/iain_maitland_resume.pdf"] => {
+                rouille::match_assets(&request, ".")
+            },
             (GET) ["/assets/paintings/{painting}", _painting: String] => {
                 rouille::match_assets(&request, ".")
             },
@@ -74,5 +72,3 @@ fn main(){
         )
     });
 }
-
-

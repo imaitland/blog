@@ -87,8 +87,6 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     } else if (node.id == "photos") {
       location.href =
         "https://photos.google.com/share/AF1QipPgG8AHI2l56B7gtrN2GKYQjrJW05wOy1GPVqAGj2eR-RtTuoRFTFdCSN0Z13Zryw?key=U0VsTGFNSkM5VVBOeVFOajg4RXpRNFc2Q25KV1RR";
-    } else if (node.id == "notebooks") {
-      location.href = "https://imaitland.github.io/notebooks/lab/index.html";
     } else {
       window.location.href = node.id;
     }
