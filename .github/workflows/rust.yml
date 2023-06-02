@@ -1,36 +1,48 @@
-name: Rust
+name: Rust application ephemeral environment build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-    - name: Build site
-      run: cargo run -- --build
-    - name: Cache build artifacts
-      uses: actions/cache@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
       with:
-        path: |
-          **/target
+          toolchain: stable
+          override: true
+          target: x86_64-unknown-linux-musl
+
+    - name: Configure sccache env var and set build profile to ephemeral build
+      run: | 
+          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
+	  echo “SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+          echo “RUSTFLAGS=’--cfg profile=ephemeral-build’” >> $GITHUB_ENV
+
+    - name: Run sccache-cache
+      uses: mozilla-actions/sccache-action@v0.0.2
+
+    - name: Run build
+        uses: actions-rs/cargo@v1
+        with:
+            command: build
+            args: --target x86_64-unknown-linux-musl --release
+    - name: Generate static site
+        uses: actions-rs/cargo@v1
+        with:
+            command: -- --build
+            args: --target x86_64-unknown-linux-musl --release
+
     - name: Commit changes
       uses: EndBug/add-and-commit@v9.1.3
       with:
         message: 'GH Actions Build'
         add: 'dist'
-    
-
