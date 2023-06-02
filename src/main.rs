@@ -23,9 +23,11 @@ fn main() {
         match page_builder::build() {
             Ok(_r) => {
                 println!("Build complete");
+                std::process::exit(exitcode::OK)
             }
-            Err(_why) => {
-                println!("Build Failed!")
+            Err(why) => {
+                println!("Build Failed!: {:?}", why);
+                std::process::exit(exitcode::DATAERR)
             }
         }
     }
