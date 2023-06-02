@@ -1,15 +1,15 @@
-use toml::value::Datetime;
-use std::fs;
-use maud::{Render, html, PreEscaped, Markup};
-use pulldown_cmark::{Parser, LinkType, Tag, Event};
 use ammonia;
+use maud::{html, Markup, PreEscaped, Render};
+use pulldown_cmark::{Event, LinkType, Parser, Tag};
 use serde::{Deserialize, Serialize};
+use std::fs;
 use toml;
+use toml::value::Datetime;
 use walkdir::WalkDir;
 
 pub enum Asset {
     CSS,
-    JS
+    JS,
 }
 
 /// Structs
@@ -23,7 +23,7 @@ pub struct Frontmatter {
     tag: String,
     image: String,
     icon: String,
-    draft: bool
+    draft: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -37,38 +37,37 @@ pub struct Node {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct Edge {
     source: Node,
-    target: Node
+    target: Node,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
-pub struct Link{
+pub struct Link {
     source: String,
-    target: String
+    target: String,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct Graph {
     nodes: Vec<Node>,
-    links: Vec<Link>
+    links: Vec<Link>,
 }
 
 pub struct JsObject(pub String, pub &'static str);
-impl Render for JsObject{
+impl Render for JsObject {
     fn render(&self) -> Markup {
         let js = format!("var {} = {}", &self.1, &self.0);
         html! {
             script {
-               (PreEscaped(js)) 
+               (PreEscaped(js))
             }
         }
     }
 }
 
-
 /// Links to a JS script at the given path.
 pub struct Script(pub &'static str);
 
-impl Render for Script{
+impl Render for Script {
     fn render(&self) -> Markup {
         match fs::read_to_string(self.0) {
             Ok(file_contents) => {
@@ -77,7 +76,7 @@ impl Render for Script{
                         (PreEscaped(file_contents))
                     }
                 }
-            },
+            }
             Err(_err) => {
                 html! {
                     div {
@@ -102,7 +101,7 @@ impl Render for Css {
                         (file_contents)
                     }
                 }
-            },
+            }
             Err(_err) => {
                 html! {
                     div {
@@ -117,14 +116,14 @@ impl Render for Css {
 /// Renders a block of Markdown using `pulldown-cmark`.
 pub struct ExternalAsset<'a>(pub &'a str, pub Asset);
 
-impl Render for ExternalAsset <'_> {
+impl Render for ExternalAsset<'_> {
     fn render(&self) -> Markup {
         match self.1 {
             Asset::CSS => {
                 html! {
                     link rel="stylesheet" type="text/css" href=(self.0);
                 }
-            },
+            }
             Asset::JS => {
                 html! {
                     script src=(self.0) {};
@@ -137,10 +136,10 @@ impl Render for ExternalAsset <'_> {
 /// Renders a block of Markdown using `pulldown-cmark`.
 pub struct Markdown<'a>(pub &'a str);
 
-impl Render for Markdown <'_> {
+impl Render for Markdown<'_> {
     fn render(&self) -> Markup {
         let parser = Parser::new(self.0);
-         // Write to String buffer.
+        // Write to String buffer.
         let mut unsafe_html_output: String = String::with_capacity(self.0.len() * 3 / 2);
         pulldown_cmark::html::push_html(&mut unsafe_html_output, parser);
         // Sanitize it with ammonia
@@ -248,10 +247,9 @@ pub mod helpers {
     }
 
     pub fn generate_graph(dir: &str) -> Graph {
-
         let mut graph = Graph {
             nodes: vec![],
-            links: vec![]
+            links: vec![],
         };
 
         let paths = helpers::generate_index(dir);
@@ -264,30 +262,26 @@ pub mod helpers {
                     // Split frontmatter here...
                     let (fm, md) = helpers::split_contents(&file_contents);
 
-                    graph.nodes.push(
-                        Node{
-                            id: fm.id.to_owned(),
-                            title: Some(fm.title.to_owned()),
-                            icon: Some(fm.icon.to_owned()),
-                            tag: Some(fm.tag.to_owned())
-                        }
-                    );
+                    graph.nodes.push(Node {
+                        id: fm.id.to_owned(),
+                        title: Some(fm.title.to_owned()),
+                        icon: Some(fm.icon.to_owned()),
+                        tag: Some(fm.tag.to_owned()),
+                    });
 
                     let e = helpers::get_edges(&md, &fm);
 
-                    let mut links = e.iter().map(|edge| {
-                        Link {
+                    let mut links = e
+                        .iter()
+                        .map(|edge| Link {
                             source: edge.source.id.to_owned(),
-                            target: edge.target.id.to_owned()
-                        }
-                    }).collect();
+                            target: edge.target.id.to_owned(),
+                        })
+                        .collect();
                     graph.links.append(&mut links);
                 }
-                Err(_why) => {
-
-                }
+                Err(_why) => {}
             }
-
         }
         // Parse to json.
         //serde_json::to_string(&graph).unwrap();
@@ -300,63 +294,58 @@ pub mod helpers {
             .filter_map(|e| e.ok())
             .filter(|e| e.file_type().is_file())
             .map(|e| {
-                let path = e
-                    .path()
-                    .to_str()
-                    .unwrap();
-                    String::from(path)
+                let path = e.path().to_str().unwrap();
+                String::from(path)
             })
             .collect();
         paths
     }
 
     pub fn get_edges(contents: &String, fm: &Frontmatter) -> Vec<Edge> {
-
         let mut edges: Vec<Edge> = vec![];
 
         let mut parser = Parser::new(contents).map(|event| match event {
             Event::Start(ref tag) => {
-
                 match tag {
                     Tag::Link(link_type, url, _title) => {
                         match link_type {
                             LinkType::Inline => {
-                                // Relative links only. 
+                                // Relative links only.
                                 if url.as_ref().starts_with("/") {
                                     let edge = Edge {
                                         source: Node {
                                             id: fm.id.to_owned(),
                                             title: None,
                                             tag: None,
-                                            icon: None
+                                            icon: None,
                                         },
                                         target: Node {
                                             id: url.as_ref().strip_prefix("/").unwrap().to_string(),
                                             title: None,
                                             tag: None,
-                                            icon: None
-                                        }
+                                            icon: None,
+                                        },
                                     };
                                     edges.push(edge);
                                 }
                                 event.to_owned()
-                            },
-                            _ => event.to_owned()
+                            }
+                            _ => event.to_owned(),
                         };
-                    },
-                    _ => ()
+                    }
+                    _ => (),
                 }
                 event
             }
-            _ => event
+            _ => event,
         });
-            
+
         loop {
             parser.next();
             if parser.next() == None {
                 break;
             }
-        };
+        }
         edges
     }
 }

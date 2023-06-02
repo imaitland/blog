@@ -2,13 +2,13 @@
 // save index.html
 // save html for each md post.
 
-use std::fs;
+use maud::{html, Markup};
 use serde_json;
-use maud::{ html, Markup};
+use std::fs;
 
 use crate::render_html;
 
-pub fn index_page () -> Markup {
+pub fn index_page() -> Markup {
     let icons = render_html::Icons();
 
     // Graph data
@@ -16,7 +16,8 @@ pub fn index_page () -> Markup {
     let graph_json = serde_json::to_string(&graph_data).unwrap();
     let graph = render_html::JsObject(graph_json, "graph_data");
 
-    let force_graph_script = render_html::Script("node_modules/force-graph/dist/force-graph.min.js");
+    let force_graph_script =
+        render_html::Script("node_modules/force-graph/dist/force-graph.min.js");
     let graph_script = render_html::Script("js/graph.js");
     let logo = render_html::Logo();
     let default_css = render_html::Css("styles/default.css");
@@ -28,10 +29,13 @@ pub fn index_page () -> Markup {
 
     // Index page for visitors who have JS disabled.
     let ix = render_html::helpers::generate_index("md");
-    let stripped = ix.iter().map(|pa|{
-        let result = pa.strip_prefix("md/").unwrap().strip_suffix(".md").unwrap();
-        String::from(result)
-    }).collect();
+    let stripped = ix
+        .iter()
+        .map(|pa| {
+            let result = pa.strip_prefix("md/").unwrap().strip_suffix(".md").unwrap();
+            String::from(result)
+        })
+        .collect();
     let posts_list = render_html::Index(&stripped);
 
     html! {
@@ -55,8 +59,7 @@ pub fn index_page () -> Markup {
     }
 }
 
-pub fn md_page (contents: String) -> Markup {
-
+pub fn md_page(contents: String) -> Markup {
     let logo = render_html::Logo();
     let anime_script = render_html::Script("js/anime.js");
     let anime_css = render_html::Css("styles/anime.css");
@@ -70,11 +73,17 @@ pub fn md_page (contents: String) -> Markup {
     let md = render_html::Markdown(&md_contents);
 
     // Syntax highlighting
-    let syntax_css = render_html::ExternalAsset("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css", render_html::Asset::CSS);
-    let syntax_script = render_html::ExternalAsset("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js", render_html::Asset::JS);
+    let syntax_css = render_html::ExternalAsset(
+        "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css",
+        render_html::Asset::CSS,
+    );
+    let syntax_script = render_html::ExternalAsset(
+        "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js",
+        render_html::Asset::JS,
+    );
     let syntax_init = render_html::Script("js/syntax.js");
 
-    html!{
+    html! {
         head {
             (icons)
             (meta)
@@ -95,10 +104,9 @@ pub fn md_page (contents: String) -> Markup {
     }
 }
 
-pub fn build() -> Result<(),std::io::Error>  {
-
+pub fn build() -> Result<(), std::io::Error> {
     match fs::create_dir("dist") {
-        Ok(_) => {},
+        Ok(_) => {}
         Err(_) => {}
     };
     let index_html = index_page().into_string();
@@ -112,18 +120,20 @@ pub fn build() -> Result<(),std::io::Error>  {
         match fs::read_to_string(&file_path) {
             Ok(contents) => {
                 let md_html = md_page(contents).into_string();
-                let old_file_name = file_path.strip_prefix("md/").unwrap().strip_suffix(".md").unwrap();
-                let new_file_name = format!("dist/{}", String::from(old_file_name)); 
+                let old_file_name = file_path
+                    .strip_prefix("md/")
+                    .unwrap()
+                    .strip_suffix(".md")
+                    .unwrap();
+                let new_file_name = format!("dist/{}", String::from(old_file_name));
 
                 fs::write(new_file_name, md_html).expect("Unable to write file");
-            },
-            Err(_why) => {
-                ()
             }
+            Err(_why) => (),
         }
     }
 
     // copy assets directory.
-    
+
     Ok(())
 }
