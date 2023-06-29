@@ -80,8 +80,8 @@ var nightmode = true;
 // Assume that there is a js object with name 'graph_data' already present...
 
 const Graph = ForceGraph()(document.getElementById("graph"))
-  .warmupTicks(60)
-  .cooldownTicks(50)
+  .warmupTicks(35)
+  .cooldownTicks(1)
   .nodeId("id")
   .nodeVal("val")
   .nodeLabel("title")
