@@ -8,8 +8,8 @@ var nightmode = true;
 // Assume that there is a js object with name 'graph_data' already present...
 
 const Graph = ForceGraph()(document.getElementById("graph"))
-  .warmupTicks(60)
-  .cooldownTicks(50)
+  .warmupTicks(35)
+  .cooldownTicks(1)
   .nodeId("id")
   .nodeVal("val")
   .nodeLabel("title")
@@ -85,8 +85,10 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     } else if (node.id == "resume") {
       location.href = "iain_maitland_resume.pdf";
     } else if (node.id == "photos") {
-      location.href =
-        "https://photos.google.com/share/AF1QipPgG8AHI2l56B7gtrN2GKYQjrJW05wOy1GPVqAGj2eR-RtTuoRFTFdCSN0Z13Zryw?key=U0VsTGFNSkM5VVBOeVFOajg4RXpRNFc2Q25KV1RR";
+      window.open(
+        "https://photos.google.com/share/AF1QipPgG8AHI2l56B7gtrN2GKYQjrJW05wOy1GPVqAGj2eR-RtTuoRFTFdCSN0Z13Zryw?key=U0VsTGFNSkM5VVBOeVFOajg4RXpRNFc2Q25KV1RR",
+        "_blank"
+      );
     } else {
       window.location.href = node.id;
     }

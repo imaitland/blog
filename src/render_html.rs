@@ -24,6 +24,7 @@ pub struct Frontmatter {
     image: String,
     icon: String,
     draft: bool,
+    redirect_url: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -172,6 +173,14 @@ impl Render for Meta<'_> {
     fn render(&self) -> Markup {
         // parse self to toml..
         let fm: &Frontmatter = self.0;
+
+        // if redirect, just return redirect meta tag
+        if fm.redirect_url.is_some() {
+            let redirect_url = fm.redirect_url.as_ref().unwrap();
+            return html! {
+                meta http-equiv="refresh" content=(format!("0; url={}", redirect_url)) {}
+            };
+        }
 
         html! {
             meta name="author" content=(fm.author) {}

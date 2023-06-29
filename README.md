@@ -26,7 +26,7 @@ All this is made possible by the following dependencies (the JS dependencies are
 To get the blog running locally you can run the following commands.
 
 ### Install and Run
-```
+``
 yarn build
 cargo run -- --port 8000
 ```
@@ -41,7 +41,7 @@ cargo run -- --build
 The files in the newly created `dist` directory represent your site.
 
 ## Next steps.
-- [ ] Tests!
+- [ ] Testss
 - [ ] Enable drafts.
 - [x] Post Social / OpenGraph meta / header.
 - [x] Create a static site build command, and host on s3 / netlify / github pages or similar.
