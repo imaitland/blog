@@ -7,8 +7,8 @@ var nightmode = true;
 // Assume that there is a js object with name 'graph_data' already present...
 
 const Graph = ForceGraph()(document.getElementById("graph"))
-  .warmupTicks(100)
-  .cooldownTicks(1)
+  .warmupTicks(60)
+  .cooldownTicks(30)
   .nodeId("id")
   .nodeVal("val")
   .nodeLabel("title")
@@ -94,7 +94,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   })
   //.d3Force('charge', null)
   .onEngineStop(() => {
-    Graph.zoomToFit(1, 100);
+    Graph.zoomToFit(200, 20);
   })
 
   // Contain nodes to a box.

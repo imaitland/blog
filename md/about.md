@@ -14,14 +14,15 @@ draft = false
 ![](/assets/IMG_5208.JPG)
 
 # About
-My name is iain maitland. I'm a software engineer at AWS in Baltimore, Maryland, USA. I've worked at a few startups big and small over the last 6 years or so as a frontend and then fullstack developer. If you want to keep it formal, my [resume is here](iain_maitland_resume.pdf).
+My name is iain maitland. I'm a software engineer at AWS in Baltimore, Maryland, USA. I've worked at a few startups big and small over the last 7 years or so as a frontend and then fullstack developer. My [resume is here](iain_maitland_resume.pdf).
 
-This website was written in [Rust](/learning_rust), the source is here: [github/imaitland/blog](https://github.com/imaitland/blog)
+Professionally I work mostly in Typescript on distributed and data intensive web front ends.
 
-I'm currently exploring the world of [machine learning](/learning_ml) and ai
+I also like playing around with [Rust](/learning_rust), like this blog - the source is here: [github/imaitland/blog](https://github.com/imaitland/blog) and [machine learning](/learning_ml).
 
-I also enjoy, writing, [photography](/photos), [poetry](/poems), and [painting](/painting).
+In my free time I enjoy, writing, [photography](/photos), [poetry](/poems), and [painting](/painting).
 
 If you'd like to contact me
+
 - Email: hi@iainmaitland.com
 
