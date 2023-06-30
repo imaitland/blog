@@ -15,7 +15,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   .nodeAutoColorBy("id")
   .nodeCanvasObject((node, ctx, globalScale) => {
     let label = emojimode ? node.icon : node.title;
-    let fontSize = emojimode ? 36 : 5;
+    let fontSize = emojimode ? 26 : 5;
 
     ctx.font = `${fontSize}px Sans-Serif`;
 
