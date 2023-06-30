@@ -20,7 +20,7 @@ This website was written in [Rust](/learning_rust), the source is here: [github/
 
 I'm currently exploring the world of [machine learning](/learning_ml) and ai
 
-I also enjoy, writing, [photography](/photos), [poetry](/poems), and [painting](/painting)!
+I also enjoy, writing, [photography](/photos), [poetry](/poems), and [painting](/painting).
 
 If you'd like to contact me
 - Email: hi@iainmaitland.com

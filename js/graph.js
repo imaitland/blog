@@ -1,14 +1,13 @@
 document.getElementsByTagName("html")[0].className += " jsEnabled";
 
 var boxsize = 60;
-var zoomIn = true;
 var emojimode = true;
 var nightmode = true;
 
 // Assume that there is a js object with name 'graph_data' already present...
 
 const Graph = ForceGraph()(document.getElementById("graph"))
-  .warmupTicks(35)
+  .warmupTicks(100)
   .cooldownTicks(1)
   .nodeId("id")
   .nodeVal("val")
@@ -16,8 +15,8 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   .nodeAutoColorBy("id")
   .nodeCanvasObject((node, ctx, globalScale) => {
     let label = emojimode ? node.icon : node.title;
+    let fontSize = emojimode ? 36 : 5;
 
-    const fontSize = 16;
     ctx.font = `${fontSize}px Sans-Serif`;
 
     //const textWidth = ctx.measureText(node_dimensions).width;
@@ -95,12 +94,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   })
   //.d3Force('charge', null)
   .onEngineStop(() => {
-    if (zoomIn) {
-      Graph.zoomToFit(1000, 80);
-      // Don't zoomin again.
-      zoomIn = false;
-      // remove the box to prevent bugs when dragging.
-    }
+    Graph.zoomToFit(1, 100);
   })
 
   // Contain nodes to a box.

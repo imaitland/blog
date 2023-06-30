@@ -6,7 +6,7 @@ description = "Implementing a graph in Rust"
 date = 2021-03-06
 tag = "graph"
 image = "/assets/og-image-512x512.png"
-icon = "👪"
+icon = "🦥"
 draft = false
 +++
 
