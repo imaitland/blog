@@ -16,7 +16,7 @@ draft = false
 # About
 My name is iain maitland. I'm a software engineer at AWS in Baltimore, Maryland, USA. I've worked at a few startups big and small over the last 7 years or so as a frontend and then fullstack developer. My [resume is here](iain_maitland_resume.pdf).
 
-Professionally I work mostly in Typescript on distributed and data intensive web front ends.
+Professionally I am currently part of a platform team, working mostly in Typescript on cloud native, data intensive applications at AWS scale.
 
 I also like playing around with [Rust](/learning_rust), like this blog - the source is here: [github/imaitland/blog](https://github.com/imaitland/blog) and [machine learning](/learning_ml).
 
