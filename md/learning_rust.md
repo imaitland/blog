@@ -15,7 +15,7 @@ draft = false
 As I learn Rust I've been collecting exercises, my thoughts and notes on them here.
 
 ## Projects
-- A static site generator (i.e this blog!)
+- [A static site generator](https://github.com/imaitland/blog)
 
 ## Learning Exercises
 - Multi-threaded server implementation
