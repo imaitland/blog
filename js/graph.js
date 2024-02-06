@@ -94,7 +94,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   })
   //.d3Force('charge', null)
   .onEngineStop(() => {
-    Graph.zoomToFit(200, 20);
+    Graph.zoomToFit(200, 80);
   })
 
   // Contain nodes to a box.
