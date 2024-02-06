@@ -1,4 +1,4 @@
-<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Rust related learning exercises and projects"></meta><meta property="og:description" content="Rust related learning exercises and projects"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Rust"></meta><meta name="twitter:description" content="Rust related learning exercises and projects"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Rust</title><style media="all">@media print {
+<head><link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/apple-touch-icon.png"></link><link rel="apple-touch-icon-precomposed" href="/assets/android-chrome-192x192.png"></link><link rel="shortcut icon" href="/assets/favicon-32x32.png"></link><meta name="author" content="iain maitland"></meta><meta name="description" content="Rust related WASM projects"></meta><meta property="og:description" content="Rust related WASM projects"></meta><meta property="og:image" content="/assets/og-image-512x512.png"></meta><meta name="twitter:card" content="summary"></meta><meta name="twitter:title" content="Web Assembly"></meta><meta name="twitter:description" content="Rust related WASM projects"></meta><meta name="twitter:image" content="/assets/og-image-512x512.png"></meta><title>Web Assembly</title><style media="all">@media print {
   *,
   *:before,
   *:after {
@@ -264,21 +264,9 @@ code {
 .revealspring {
     display: inline-block;
     opacity: 1;
-}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Rust</h1>
-<p>As I learn Rust I've been collecting exercises, my thoughts and notes on them here.</p>
-<h2>Projects</h2>
+}</style><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script></head><div class="logo-blog_page"><div class="logo-container"><a class="logo" href="/"><span class="revealspring" data-x="30" data-y="-78">/ </span><span class="reveal" data-x="-40" data-y="104">/</span><span class="reveal" data-x="-60" data-y="-156">\ </span><span class="reveal" data-x="34" data-y="-88">/ </span><span class="reveal" data-x="-16" data-y="42">/</span><span class="revealspring" data-x="104" data-y="272">\</span><span class="reveal" data-x="75" data-y="-195">/ </span></a></div></div><div class="markdown-body"><h1>Fast Fourier Transform</h1>
 <ul>
-<li>A static site generator (i.e this blog!)</li>
-</ul>
-<h2>Learning Exercises</h2>
-<ul>
-<li>Multi-threaded server implementation</li>
-<li>Parser Combinator</li>
-<li>KV store implementation</li>
-<li>Rust Linked Lists</li>
-<li>Build your own Lisp (in Rust)</li>
-<li><a href="/data_structures" rel="noopener noreferrer">Data Structures</a></li>
-<li><a href="/wasm" rel="noopener noreferrer">Web Assembly</a></li>
+<li><a href="/fourier" rel="noopener noreferrer">FFT of an arbitrary input signal, computed in web assembly and rendered on a HTML Canvas</a></li>
 </ul>
 </div><script>anime({
     targets: '.reveal',
