@@ -21,7 +21,7 @@ As I learn Rust I've been collecting exercises, my thoughts and notes on them he
 - Multi-threaded server implementation
 - Parser Combinator
 - KV store implementation
-- Rust Linked Lists
+- [Linked Lists](/linked_list)
 - Build your own Lisp (in Rust)
 - [Data Structures](/data_structures)
 - [Web Assembly](/wasm)
