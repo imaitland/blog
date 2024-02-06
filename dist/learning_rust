@@ -268,14 +268,14 @@ code {
 <p>As I learn Rust I've been collecting exercises, my thoughts and notes on them here.</p>
 <h2>Projects</h2>
 <ul>
-<li>A static site generator (i.e this blog!)</li>
+<li><a href="https://github.com/imaitland/blog" rel="noopener noreferrer">A static site generator</a></li>
 </ul>
 <h2>Learning Exercises</h2>
 <ul>
 <li>Multi-threaded server implementation</li>
 <li>Parser Combinator</li>
 <li>KV store implementation</li>
-<li>Rust Linked Lists</li>
+<li><a href="/linked_list" rel="noopener noreferrer">Linked Lists</a></li>
 <li>Build your own Lisp (in Rust)</li>
 <li><a href="/data_structures" rel="noopener noreferrer">Data Structures</a></li>
 <li><a href="/wasm" rel="noopener noreferrer">Web Assembly</a></li>
