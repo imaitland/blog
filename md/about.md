@@ -6,7 +6,7 @@ description = "About iain maitland's website"
 date = 2021-02-24
 tag = "about"
 image = "/assets/og-image-512x512.png"
-icon = "👁👁️"
+icon = "🩻"
 draft = false
 +++
 ![](/assets/IMG_5204.JPG)
