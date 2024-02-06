@@ -24,3 +24,4 @@ As I learn Rust I've been collecting exercises, my thoughts and notes on them he
 - Rust Linked Lists
 - Build your own Lisp (in Rust)
 - [Data Structures](/data_structures)
+- [Web Assembly](/wasm)
