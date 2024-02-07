@@ -95,6 +95,12 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   //.d3Force('charge', null)
   .onEngineStop(() => {
     Graph.zoomToFit(200, 80);
+    // if mobile zoom to about...
+
+    // Center/zoom on node
+    const rootNode = graph_data.nodes.find((node)=>{node.id === "about"})
+    Graph.centerAt(rootNode.x, rootNode.y, 1000);
+    Graph.zoom(8, 2000);
   })
 
   // Contain nodes to a box.
