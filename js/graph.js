@@ -63,6 +63,9 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     d.source.tag;
   })
   .onNodeClick(async (node) => {
+    // Store last clicked in local storage
+    localStorage.setItem('lastClickedNode', JSON.stringify(node));
+
     if (node.id == "day") {
       document.getElementsByClassName("logo")[0].style.color = "black";
 
@@ -107,6 +110,16 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     //const rootNode = graph_data.nodes.find((node)=>{return node.id === "about"})
     //Graph.centerAt(rootNode.x, rootNode.y, 1000);
     //Graph.zoom(8, 2000);
+    const lastClickedNode = JSON.parse(localStorage.getItem('lastClickedNode'));
+    if (lastClickedNode) {
+      console.log('Last clicked node:', lastClickedNode.id);
+      Graph.centerAt(lastClickedNode.x, lastClickedNode.y, 1000);
+      Graph.zoom(8, 2000);
+    } else {
+      const rootNode = graph_data.nodes.find((node)=>{return node.id === "about"})
+      Graph.centerAt(rootNode.x, rootNode.y, 1000);
+      Graph.zoom(8, 2000);
+    }
   })
 
   // Contain nodes to a box.
