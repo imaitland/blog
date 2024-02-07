@@ -13,12 +13,49 @@ function delay(milliseconds){
 // Assume that there is a js object with name 'graph_data' already present...
 
 const Graph = ForceGraph()(document.getElementById("graph"))
+    // Contain nodes to a box.
+  .graphData(graph_data)
   .warmupTicks(60)
   .cooldownTicks(30)
   .nodeId("id")
   .nodeVal("val")
   .nodeLabel("title")
   .nodeAutoColorBy("id")
+  .nodeCanvasObject((node, ctx, globalScale) => {
+    let label = emojimode ? node.icon : node.title;
+    let fontSize = emojimode ? 26 : 5;
+
+    ctx.font = `${fontSize}px Sans-Serif`;
+
+    //const textWidth = ctx.measureText(node_dimensions).width;
+    const textWidth = ctx.measureText(label).width;
+    const bckgDimensions = [textWidth, fontSize].map((n) => n + fontSize * 0.2); // some padding
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.0)";
+
+    ctx.fillRect(
+      node.x - bckgDimensions[0] / 2,
+      node.y - bckgDimensions[1] / 2,
+      ...bckgDimensions
+    );
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = node.color;
+    ctx.fillText(label, node.x, node.y);
+
+    node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
+  })
+  .nodePointerAreaPaint((node, color, ctx) => {
+    ctx.fillStyle = color;
+    const bckgDimensions = node.__bckgDimensions;
+    bckgDimensions &&
+      ctx.fillRect(
+        node.x - bckgDimensions[0] / 2,
+        node.y - bckgDimensions[1] / 2,
+        ...bckgDimensions
+      );
+  })
   .linkSource("source")
   .linkTarget("target")
   .linkWidth(1.3)
@@ -86,7 +123,6 @@ const Graph = ForceGraph()(document.getElementById("graph"))
       Graph.centerAt(rootNode.x, rootNode.y, 1000);
       Graph.zoom(8, 2000);
     }
-  })
+  });
 
-  // Contain nodes to a box.
-  .graphData(graph_data);
+
