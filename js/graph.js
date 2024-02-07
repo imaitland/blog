@@ -116,12 +116,12 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     if (lastClickedNode) {
       console.log('Last clicked node:', lastClickedNode.id);
       Graph.centerAt(lastClickedNode.x, lastClickedNode.y, 1000);
-      Graph.zoom(8, 2000);
+      Graph.zoom(6, 2000);
     } else {
       console.log("using root node");
       const rootNode = graph_data.nodes.find((node)=>{return node.id === "about"})
       Graph.centerAt(rootNode.x, rootNode.y, 1000);
-      Graph.zoom(8, 2000);
+      Graph.zoom(5, 2000);
     }
   });
 
