@@ -58,7 +58,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   })
   .linkSource("source")
   .linkTarget("target")
-  .linkWidth(1.3)
+  .linkWidth(2.0)
   .linkColor(() => (nightmode ? "white" : "black"))
   .linkDirectionalArrowLength(2)
   .linkAutoColorBy((d) => {
