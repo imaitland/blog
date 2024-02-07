@@ -129,6 +129,9 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     d.source.tag;
   })
   .onNodeClick((node) => {
+    // Center/zoom on node
+    Graph.centerAt(node.x, node.y, 1000);
+    Graph.zoom(8, 2000);
     if (node.id == "day") {
       document.getElementsByClassName("logo")[0].style.color = "black";
 
@@ -171,7 +174,6 @@ const Graph = ForceGraph()(document.getElementById("graph"))
 
     // Center/zoom on node
     const rootNode = graph_data.nodes.find((node)=>{return node.id === "about"})
-    console.log("R", rootNode);
     Graph.centerAt(rootNode.x, rootNode.y, 1000);
     Graph.zoom(8, 2000);
   })
