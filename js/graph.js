@@ -63,12 +63,6 @@ const Graph = ForceGraph()(document.getElementById("graph"))
     d.source.tag;
   })
   .onNodeClick(async (node) => {
-    // Center/zoom on clicked node
-    Graph.centerAt(node.x, node.y, 1000);
-    Graph.zoom(8, 2000);
-    // wait for complete
-    await delay(1500);
-    // Store last clicked in local storage
     if (node.id == "day") {
       document.getElementsByClassName("logo")[0].style.color = "black";
 
