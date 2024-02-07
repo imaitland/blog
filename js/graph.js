@@ -103,7 +103,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
   })
   //.d3Force('charge', null)
   .onEngineStop(() => {
-    Graph.zoomToFit(200, 80);
+    //Graph.zoomToFit(200, 80);
     // if mobile zoom to about...
 
     // Center/zoom on node
@@ -116,6 +116,7 @@ const Graph = ForceGraph()(document.getElementById("graph"))
       Graph.centerAt(lastClickedNode.x, lastClickedNode.y, 1000);
       Graph.zoom(8, 2000);
     } else {
+      console.log("using root node");
       const rootNode = graph_data.nodes.find((node)=>{return node.id === "about"})
       Graph.centerAt(rootNode.x, rootNode.y, 1000);
       Graph.zoom(8, 2000);
