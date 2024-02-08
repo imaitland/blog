@@ -26,7 +26,7 @@ All this is made possible by the following dependencies (the JS dependencies are
 To get the blog running locally you can run the following commands.
 
 ### Install and Run
-``
+```
 yarn build
 cargo run -- --port 8000
 ```
